@@ -252,6 +252,7 @@ const MoviesPage: NextPage = () => {
                           quality={90}
                           placeholder="blur"
                           blurDataURL={movie.poster}
+                          unoptimized
                           onError={(e) =>
                             (e.currentTarget.src = "/placeholder.png")
                           }
@@ -424,6 +425,7 @@ const MoviesPage: NextPage = () => {
                             blurDataURL={movie.poster}
                             sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, (max-width: 1280px) 25vw, (min-width: 1281px) 20vw"
                             quality={80}
+                            unoptimized
                             onError={(e) =>
                               (e.currentTarget.src = "/placeholder.png")
                             }

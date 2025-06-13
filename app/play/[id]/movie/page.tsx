@@ -1724,6 +1724,7 @@ function MoviePlayerSkeleton() {
                         alt={movie.title}
                         width={100}
                         height={150}
+                        unoptimized
                         className="w-full h-full object-cover"
                       />
                     </div>
