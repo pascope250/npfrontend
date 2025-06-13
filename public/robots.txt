@@ -1,0 +1,47 @@
+# Allow all bots to crawl safe content
+User-agent: *
+Allow: /videos/
+Allow: /quotes/
+allow: /movies/
+Disallow: /stream/
+Disallow: /proxy/
+Disallow: /private/
+Disallow: /backend/
+Disallow: /api/
+Disallow: /tmp/
+Disallow: /uploads/
+
+# Optional: Hide WordPress or CMS folders if used
+Disallow: /wp-admin/
+Disallow: /wp-login.php
+
+# Block specific aggressive or scraping-detection bots
+User-agent: AhrefsBot
+Disallow: /
+
+User-agent: SemrushBot
+Disallow: /
+
+User-agent: MJ12bot
+Disallow: /
+
+User-agent: DotBot
+Disallow: /
+
+User-agent: BLEXBot
+Disallow: /
+
+User-agent: CCBot
+Disallow: /
+
+# Allow important bots like Googlebot, Bingbot, etc.
+User-agent: Googlebot
+Allow: /videos/
+Allow: /quotes/
+Disallow: /movies/
+
+User-agent: Bingbot
+Allow: /videos/
+Allow: /quotes/
+Disallow: /movies/
+
