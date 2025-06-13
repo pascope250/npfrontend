@@ -1,7 +1,7 @@
 "use client";
 import type { NextPage } from "next";
 import Head from "next/head";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Genre, Movie, useMovieContext } from "@/context/movieContext";
 import Image from "next/image";
 import Link from "next/link";
@@ -14,6 +14,7 @@ import {
   PlayIcon,
 } from "@heroicons/react/24/solid";
 import { FaInfoCircle } from "react-icons/fa";
+import AdInFeed from "@/components/ads/AdInFeed";
 
 const MoviesPage: NextPage = () => {
   const router = useRouter();
@@ -399,90 +400,81 @@ const MoviesPage: NextPage = () => {
             </div>
           </section>
           {/* Genre Sections */}
-          {filteredCategories.map((genre) => (
-            <section
-              key={genre.categoryName}
-              className="mb-10 sm:mb-16 px-2 sm:px-0"
-            >
-              <h2 className="text-xl sm:text-2xl font-bold text-white mb-4 sm:mb-6">
-                {genre.categoryName}
-              </h2>
-              <div className={`grid grid-cols-2 sm:grid-cols-5 gap-3 sm:gap-4`}>
-                {genre.movies.slice(0, isMobile ? 6 : 5).map((movie) => (
-                  <div
-                    key={movie.id}
-                    className="bg-gray-800 rounded-lg overflow-hidden hover:bg-gray-700 transition-colors h-full flex flex-col"
-                  >
-                    <div className="relative aspect-[2/3] bg-gray-700 overflow-hidden">
-                      {movie.poster ? (
-                        <Link href={`/play/${movie.id}/movie`}>
-                          <Image
-                            src={movie.poster}
-                            width={200}
-                            height={300}
-                            alt={movie.title}
-                            className="w-full h-full object-cover"
-                            loading="lazy"
-                            placeholder="blur"
-                            blurDataURL={movie.poster}
-                            sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, (max-width: 1280px) 25vw, (min-width: 1281px) 20vw"
-                            quality={80}
-                            unoptimized
-                            onError={(e) =>
-                              (e.currentTarget.src = "/placeholder.png")
-                            }
-                          />
-                        </Link>
-                      ) : (
-                        <div className="w-full h-full flex items-center justify-center">
-                          <span className="text-gray-400 text-xs sm:text-sm text-center p-1">
-                            No poster available
-                          </span>
-                        </div>
-                      )}
-                    </div>
-                    <div className="p-2 sm:p-3 flex-grow">
-                      <h3 className="font-bold text-sm sm:text-base truncate">
-                        {movie.title}
-                      </h3>
-                      <div className="flex justify-between items-center mt-1">
-                        <p className="text-gray-400 text-xs sm:text-sm">
-                          {movie.year}
-                        </p>
-                        <div className="flex items-center">
-                          <span className="text-xs text-gray-300">
-                            ⭐ {movie.rating}/10
-                          </span>
-                          {/* <span className="text-xs text-gray-300">{movie.rating}</span> */}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-
-                {isMobile && genre.movies.length > 6 && (
-                  <Link href={`/genre/${genre.movies[0].categoryId}`} passHref>
-                    <div className="bg-gray-800 rounded-lg flex items-center justify-center aspect-[2/3] cursor-pointer hover:bg-gray-700 transition-colors">
-                      <button className="text-emerald-400 text-sm font-medium">
-                        +{genre.movies.length - 6} More
-                      </button>
-                    </div>
-                  </Link>
-                )}
-              </div>
-
-              {/* {!isMobile && genre.movies.length > 5 && (
-                <div className="mt-4 text-center">
-                  <Link href={`/genre/${genre.movies[0].categoryId}`} passHref>
-                    <button className="text-emerald-400 hover:text-emerald-300 text-sm font-medium">
-                      View All {genre.movies.length}{" "}
-                      {genre.movies[0].categoryId} Movies
-                    </button>
-                  </Link>
+          {filteredCategories.map((genre, index) => (
+  <React.Fragment key={genre.categoryName}>
+    <section className="mb-10 sm:mb-16 px-2 sm:px-0">
+      <h2 className="text-xl sm:text-2xl font-bold text-white mb-4 sm:mb-6">
+        {genre.categoryName}
+      </h2>
+      <div className="grid grid-cols-2 sm:grid-cols-5 gap-3 sm:gap-4">
+        {genre.movies.slice(0, isMobile ? 6 : 5).map((movie) => (
+          <div
+            key={movie.id}
+            className="bg-gray-800 rounded-lg overflow-hidden hover:bg-gray-700 transition-colors h-full flex flex-col"
+          >
+            <div className="relative aspect-[2/3] bg-gray-700 overflow-hidden">
+              {movie.poster ? (
+                <Link href={`/play/${movie.id}/movie`}>
+                  <Image
+                    src={movie.poster}
+                    width={200}
+                    height={300}
+                    alt={movie.title}
+                    className="w-full h-full object-cover"
+                    loading="lazy"
+                    placeholder="blur"
+                    blurDataURL={movie.poster}
+                    sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, (max-width: 1280px) 25vw, (min-width: 1281px) 20vw"
+                    quality={80}
+                    unoptimized
+                    onError={(e) =>
+                      (e.currentTarget.src = "/placeholder.png")
+                    }
+                  />
+                </Link>
+              ) : (
+                <div className="w-full h-full flex items-center justify-center">
+                  <span className="text-gray-400 text-xs sm:text-sm text-center p-1">
+                    No poster available
+                  </span>
                 </div>
-              )} */}
-            </section>
-          ))}
+              )}
+            </div>
+            <div className="p-2 sm:p-3 flex-grow">
+              <h3 className="font-bold text-sm sm:text-base truncate">
+                {movie.title}
+              </h3>
+              <div className="flex justify-between items-center mt-1">
+                <p className="text-gray-400 text-xs sm:text-sm">{movie.year}</p>
+                <div className="flex items-center">
+                  <span className="text-xs text-gray-300">
+                    ⭐ {movie.rating}/10
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        ))}
+
+        {isMobile && genre.movies.length > 6 && (
+          <Link href={`/genre/${genre.movies[0].categoryId}`} passHref>
+            <div className="bg-gray-800 rounded-lg flex items-center justify-center aspect-[2/3] cursor-pointer hover:bg-gray-700 transition-colors">
+              <button className="text-emerald-400 text-sm font-medium">
+                +{genre.movies.length - 6} More
+              </button>
+            </div>
+          </Link>
+        )}
+      </div>
+    </section>
+
+    {/* ✅ Inject the ad after each genre section */}
+    <div className="my-6">
+      <AdInFeed />
+    </div>
+  </React.Fragment>
+))}
+
         </main>
       )}
     </div>

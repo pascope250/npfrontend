@@ -705,6 +705,7 @@ import MovieNavbar from "@/components/MovieNavbar";
 import { toast, Toaster } from "react-hot-toast";
 // import VideoPlayer from "@/components/VideoPlayer";
 import DirectVideoPlayer from "@/components/DirectVideoPlayer";
+import GoogleAd from "@/components/ads/GoogleAd";
 
 const MoviePlayerPage = () => {
   const {
@@ -1395,6 +1396,8 @@ function MoviePlayerSkeleton() {
                 <h2 className="text-xl font-semibold mb-3">Overview</h2>
                 <p className="text-gray-300">{currentMovie?.description}</p>
               </div>
+
+              <GoogleAd/>
 
               {/* Comments Section */}
               <div className="mt-8">

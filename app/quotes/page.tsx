@@ -17,6 +17,7 @@ import {
   GlobeAltIcon,
 } from '@heroicons/react/24/solid';
 import React, { JSX } from 'react';
+import AdInFeed from '@/components/ads/AdInFeed';
 
 const categoryColors: Record<string, string> = {
   love: 'bg-pink-100 text-pink-600',
@@ -114,25 +115,29 @@ const QuotesPage: NextPage = () => {
           </h1>
           <div className="max-w-5xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 gap-8">
             {visibleQuotes.map((quote, index) => {
-              const colorClass = categoryColors[quote.category?.toLowerCase()] || categoryColors.All;
-              const icon = categoryIcons[quote.category?.toLowerCase()] || categoryIcons.All;
-              return (
-                <div
-                  key={index}
-                  className="bg-white/90 p-8 rounded-2xl shadow-xl hover:shadow-2xl transition-shadow border border-emerald-100 flex flex-col justify-between"
-                >
-                  <blockquote className="text-2xl italic text-gray-800 mb-6 leading-relaxed text-center">
-                    “{quote.quote}”
-                  </blockquote>
-                  <div className="flex flex-col sm:flex-row justify-between items-center gap-2 mt-auto">
-                    <span className={`flex items-center gap-2 px-4 py-1 rounded-full text-sm font-medium shadow ${colorClass}`}>
-                      {icon}
-                      {quote.category}
-                    </span>
-                  </div>
-                </div>
-              );
-            })}
+  const colorClass = categoryColors[quote.category?.toLowerCase()] || categoryColors.All;
+  const icon = categoryIcons[quote.category?.toLowerCase()] || categoryIcons.All;
+
+  return (
+    <React.Fragment key={index}>
+      <div className="bg-white/90 p-8 rounded-2xl shadow-xl hover:shadow-2xl transition-shadow border border-emerald-100 flex flex-col justify-between">
+        <blockquote className="text-2xl italic text-gray-800 mb-6 leading-relaxed text-center">
+          “{quote.quote}”
+        </blockquote>
+        <div className="flex flex-col sm:flex-row justify-between items-center gap-2 mt-auto">
+          <span className={`flex items-center gap-2 px-4 py-1 rounded-full text-sm font-medium shadow ${colorClass}`}>
+            {icon}
+            {quote.category}
+          </span>
+        </div>
+      </div>
+
+      {/* Show ad after every 3 quotes */}
+      {(index + 1) % 3 === 0 && <AdInFeed />}
+    </React.Fragment>
+  );
+})}
+
             {isFetching && (
               <div className="col-span-full flex justify-center py-8">
                 <div className="animate-spin rounded-full h-8 w-8 border-t-4 border-b-4 border-emerald-500"></div>

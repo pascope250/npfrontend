@@ -3,7 +3,7 @@ import Head from 'next/head';
 import Navbar from '../components/Navbar';
 import MenuCard from '../components/MenuCard';
 import { FaFilm, FaQuoteLeft, FaYoutube } from 'react-icons/fa';
-
+import AdMultiplex from '@/components/ads/AdMultiplex';
 const Home: NextPage = () => {
   return (
     <div className="min-h-screen">
@@ -48,6 +48,7 @@ const Home: NextPage = () => {
             bgColor="bg-gradient-to-br from-red-500 to-pink-500"
           />
         </div>
+        <AdMultiplex />
       </main>
 
       

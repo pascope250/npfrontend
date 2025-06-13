@@ -5,6 +5,7 @@ import Navbar from "@/components/Navbar";
 import { useVideoContext, Videos } from "@/context/youtubeContext";
 import React from "react";
 import Link from "next/link";
+import AdInFeed from "@/components/ads/AdInFeed";
 
 const VideosPage: NextPage = () => {
   const { videos, loading, searchVideo, loadPage } = useVideoContext();
@@ -129,42 +130,41 @@ const VideosPage: NextPage = () => {
             </div>
           </nav>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {filteredVideos.map((video, index) => (
-              <div
-                key={index}
-                className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-shadow flex flex-col"
-              >
-                <Link href={`/play/video/${video.id.videoId}`}>
-                  <div className="relative pb-[56.25%] bg-gray-300">
-                    <img
-                      src={video.snippet.thumbnails.medium.url}
-                      alt={video.snippet.title}
-                      className="absolute top-0 left-0 w-full h-full object-cover"
-                    />
-                  </div>
-                </Link>
-                <div className="p-4 flex flex-col flex-1">
-                  <h2 className="font-bold text-lg mb-1 line-clamp-2">
-                    {video.snippet.title}
-                  </h2>
-                  <p className="text-gray-600 text-sm mb-2">
-                    {video.snippet.channelTitle}
-                  </p>
-                  <div className="flex justify-between text-gray-500 text-xs mt-auto">
-                    <span>
-                      {new Date(video.snippet.publishedAt).toLocaleDateString(
-                        "en-US",
-                        {
-                          year: "numeric",
-                          month: "long",
-                          day: "numeric",
-                        }
-                      )}
-                    </span>
-                  </div>
-                </div>
-              </div>
-            ))}
+           {filteredVideos.map((video, index) => (
+  <React.Fragment key={index}>
+    <div className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-shadow flex flex-col">
+      <Link href={`/play/video/${video.id.videoId}`}>
+        <div className="relative pb-[56.25%] bg-gray-300">
+          <img
+            src={video.snippet.thumbnails.medium.url}
+            alt={video.snippet.title}
+            className="absolute top-0 left-0 w-full h-full object-cover"
+          />
+        </div>
+      </Link>
+      <div className="p-4 flex flex-col flex-1">
+        <h2 className="font-bold text-lg mb-1 line-clamp-2">
+          {video.snippet.title}
+        </h2>
+        <p className="text-gray-600 text-sm mb-2">
+          {video.snippet.channelTitle}
+        </p>
+        <div className="flex justify-between text-gray-500 text-xs mt-auto">
+          <span>
+            {new Date(video.snippet.publishedAt).toLocaleDateString("en-US", {
+              year: "numeric",
+              month: "long",
+              day: "numeric",
+            })}
+          </span>
+        </div>
+      </div>
+    </div>
+
+    {(index + 1) % 3 === 0 && <AdInFeed />} {/* Show ad every 3 videos */}
+  </React.Fragment>
+))}
+
             {filteredVideos.length === 0 && (
               <div className="col-span-full text-center text-gray-500 py-12 text-lg">
                 No videos found.
