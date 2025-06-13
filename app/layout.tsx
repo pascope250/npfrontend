@@ -100,7 +100,7 @@ export default function RootLayout({
         />
         
         {/* ✅ Google AdSense Script */}
-   {/* <Script
+   <Script
     id="adsbygoogle-js"
     src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2590844740735026"
     strategy="afterInteractive"
@@ -117,8 +117,8 @@ export default function RootLayout({
         });
       `,
     }}
-  /> */}
-        {/* <Script
+  />
+        <Script
           id="disable-context-menu"
           dangerouslySetInnerHTML={{
             __html: `
@@ -175,7 +175,7 @@ export default function RootLayout({
               })();
             `
           }}
-        /> */}
+        />
       </head>  
 
       <body className={`antialiased`}>
@@ -186,7 +186,7 @@ export default function RootLayout({
                 <QuoteProvider>
                   <GoogleAnalytics/>
                   <AppBar />
-                  {/* <DisableRightClick/> */}
+                  <DisableRightClick/>
                   {children}
                   <Footer />
                 </QuoteProvider>
