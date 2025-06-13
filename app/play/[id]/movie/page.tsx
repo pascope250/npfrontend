@@ -695,7 +695,7 @@
 // export default MoviePlayerPage;
 
 "use client";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Head from "next/head";
 import { Comment, Movie, useMovieContext } from "@/context/movieContext";
 import { useParams, useRouter } from "next/navigation";
@@ -749,7 +749,7 @@ const MoviePlayerPage = () => {
               movie.categoryId === foundMovie.categoryId &&
               movie.id !== foundMovie.id
           )
-          .slice(0, 10);
+          .slice(0, 20);
         setRelatedMovies(related);
       }
     }
@@ -1713,50 +1713,54 @@ function MoviePlayerSkeleton() {
             <div className="bg-gray-800 rounded-lg p-4 sticky top-20">
               <h2 className="text-xl font-semibold mb-4">More Like This</h2>
               <div className="space-y-4">
-                {relatedMovies.map((movie) => (
-                  <div
-                    key={movie.id}
-                    onClick={() => {
-                      router.push(`/play/${movie.id}/movie`);
-                    }}
-                    className="flex cursor-pointer hover:bg-gray-700 p-2 rounded-lg transition-colors"
-                  >
-                    <div className="w-20 h-28 bg-gray-700 rounded-md flex-shrink-0 overflow-hidden">
-                      <Image
-                        src={movie.poster}
-                        alt={movie.title}
-                        width={100}
-                        height={150}
-                        unoptimized
-                        className="w-full h-full object-cover"
-                      />
-                    </div>
-                    <div className="ml-3">
-                      <h3 className="font-medium">{movie.title}</h3>
-                      <div className="flex items-center mt-1 text-sm text-gray-400">
-                        <span>{movie.year}</span>
-                        <span className="mx-2">•</span>
-                        <span>{movie.rating}</span>
-                      </div>
-                      <button className="mt-2 text-sm text-emerald-400 hover:text-emerald-300 flex items-center">
-                        <svg
-                          className="w-4 h-4 mr-1"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"
-                          />
-                        </svg>
-                        Watch Now
-                      </button>
-                    </div>
-                  </div>
-                ))}
+                {relatedMovies.map((movie, index) => (
+  <React.Fragment key={movie.id}>
+    <div
+      onClick={() => router.push(`/play/${movie.id}/movie`)}
+      className="flex cursor-pointer hover:bg-gray-700 p-2 rounded-lg transition-colors"
+    >
+      <div className="w-20 h-28 bg-gray-700 rounded-md flex-shrink-0 overflow-hidden">
+        <Image
+          src={movie.poster}
+          alt={movie.title}
+          width={100}
+          height={150}
+          unoptimized
+          className="w-full h-full object-cover"
+        />
+      </div>
+      <div className="ml-3 flex flex-col justify-between">
+        <div>
+          <h3 className="font-medium">{movie.title}</h3>
+          <div className="flex items-center mt-1 text-sm text-gray-400">
+            <span>{movie.year}</span>
+            <span className="mx-2">•</span>
+            <span>{movie.rating}</span>
+          </div>
+        </div>
+        <button className="mt-2 text-sm text-emerald-400 hover:text-emerald-300 flex items-center">
+          <svg
+            className="w-4 h-4 mr-1"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"
+            />
+          </svg>
+          Watch Now
+        </button>
+      </div>
+    </div>
+
+    {(index + 1) % 3 === 0 && <GoogleAd />} {/* Show ad after every 3 movies */}
+  </React.Fragment>
+))}
+
               </div>
             </div>
           </div>
