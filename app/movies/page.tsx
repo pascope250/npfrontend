@@ -267,7 +267,9 @@ const MoviesPage: NextPage = () => {
                         {/* Play button overlay - mobile only */}
                         <div className="absolute inset-0 flex items-center justify-center sm:hidden">
                           <div className="bg-emerald-600/80 rounded-full p-3 sm:p-4 backdrop-blur-sm">
+                          <Link href={`/play/${movie.id}/movie`}>
                             <PlayIcon className="w-6 h-6 sm:w-8 sm:h-8 text-white" />
+                            </Link>
                           </div>
                         </div>
                       </div>
