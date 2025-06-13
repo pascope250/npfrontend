@@ -242,13 +242,13 @@ const MoviesPage: NextPage = () => {
                       className="w-full sm:w-1/2 h-2/3 sm:h-full flex items-center justify-center relative z-30 p-4 sm:p-8"
                       onClick={handleUserInteraction}
                     >
-                      <div className="relative w-full h-full max-w-xs transition-all duration-500 group-hover:scale-105 hover:!scale-110">
+                      <div className="relative w-full sm:w-full max-w-none sm:max-w-xs h-full transition-all duration-500 group-hover:scale-105 hover:!scale-110 flex items-center justify-center">
                         <Image
                           src={movie.poster}
                           alt={movie.title}
                           width={260}
                           height={390}
-                          className="object-cover rounded-lg sm:rounded-xl shadow-lg sm:shadow-2xl border-2 sm:border-4 border-gray-900/50 hover:border-emerald-500/30 transition-all duration-300"
+                          className="object-cover rounded-lg sm:rounded-xl shadow-lg sm:shadow-2xl border-2 sm:border-4 border-gray-900/50 hover:border-emerald-500/30 transition-all duration-300 w-full h-auto sm:w-[260px] sm:h-[390px]"
                           quality={90}
                           placeholder="blur"
                           blurDataURL={movie.poster}
@@ -267,8 +267,8 @@ const MoviesPage: NextPage = () => {
                         {/* Play button overlay - mobile only */}
                         <div className="absolute inset-0 flex items-center justify-center sm:hidden">
                           <div className="bg-emerald-600/80 rounded-full p-3 sm:p-4 backdrop-blur-sm">
-                          <Link href={`/play/${movie.id}/movie`}>
-                            <PlayIcon className="w-6 h-6 sm:w-8 sm:h-8 text-white" />
+                            <Link href={`/play/${movie.id}/movie`}>
+                              <PlayIcon className="w-6 h-6 sm:w-8 sm:h-8 text-white" />
                             </Link>
                           </div>
                         </div>
