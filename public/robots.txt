@@ -38,10 +38,10 @@ Disallow: /
 User-agent: Googlebot
 Allow: /videos/
 Allow: /quotes/
-Disallow: /movies/
+allow: /movies/
 
 User-agent: Bingbot
 Allow: /videos/
 Allow: /quotes/
-Disallow: /movies/
+allow: /movies/
 
