@@ -71,7 +71,8 @@ import {
   FaEnvelope,
   FaShieldAlt,
   FaCopyright,
-  FaQuestionCircle
+  FaQuestionCircle,
+  FaWhatsapp
 } from "react-icons/fa";
 
 export default function Footer() {
@@ -161,6 +162,10 @@ function MobileNavigation() {
         <Link href="/quotes" className="flex flex-col items-center text-xs p-2 hover:text-blue-300 transition">
           <FaQuoteRight size={20} />
           <span className="mt-1">Quotes</span>
+        </Link>
+        <Link href={'https://whatsapp.com/channel/0029Vb6rsTmGufIse0MGrx3g'} className="flex flex-col items-center text-xs p-2 hover:text-blue-300 transition">
+          <FaWhatsapp size={20} />
+          <span className="mt-1">Chat</span>
         </Link>
         <MobileNotificationBell />
       </div>

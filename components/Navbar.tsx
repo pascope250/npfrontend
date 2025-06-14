@@ -1,7 +1,7 @@
 
 // for client
 'use client'
-
+import { FaWhatsapp } from "react-icons/fa";
 import Link from 'next/link';
 import { useState } from 'react';
 
@@ -35,6 +35,16 @@ const Navbar = () => {
           >
             YouTube Videos
           </Link>
+
+          <a
+    href="https://whatsapp.com/channel/0029Vb6rsTmGufIse0MGrx3g"
+    target="_blank"
+    rel="noopener noreferrer"
+    className="flex items-center gap-2 text-white hover:text-green-400 transition-colors font-medium"
+    title="Join us on WhatsApp"
+  >
+    <FaWhatsapp className="w-5 h-5" />
+  </a>
         </div>
         
         {/* Mobile Menu Button */}
@@ -77,6 +87,17 @@ const Navbar = () => {
           >
             YouTube Videos
           </Link>
+
+          <a
+      href="https://whatsapp.com/channel/0029Vb6rsTmGufIse0MGrx3g"
+      target="_blank"
+      rel="noopener noreferrer"
+      className="flex items-center gap-2 text-white hover:text-green-400 transition-colors py-2"
+      title="Join us on WhatsApp"
+    >
+      <FaWhatsapp className="w-5 h-5" />
+      WhatsApp
+    </a>
         </div>
       )}
     </nav>

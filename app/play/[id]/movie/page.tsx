@@ -730,7 +730,7 @@ const MoviePlayerPage = () => {
   const [comments, setComments] = useState<Comment[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [videoUrl, setVideoUrl] = useState("");
-const [visibleComments, setVisibleComments] = useState(5);
+  const [visibleComments, setVisibleComments] = useState(5);
   const [replyingTo, setReplyingTo] = useState<number | null>(null);
   const [replyText, setReplyText] = useState("");
   const param = useParams();
@@ -935,7 +935,6 @@ const [visibleComments, setVisibleComments] = useState(5);
     }
   };
 
-  
   useEffect(() => {
     const fetchVideo = async () => {
       if (!currentMovie?.source?.[currentSourceIndex]) return;
@@ -1072,8 +1071,6 @@ const [visibleComments, setVisibleComments] = useState(5);
                       </div>
                     ))}
                   </div>
-
-                 
                 </div>
               </div>
             </div>
@@ -1188,8 +1185,7 @@ const [visibleComments, setVisibleComments] = useState(5);
                       className="aspect-video"
                       allowFullScreen
                     />
-                  ) : null
-                  }
+                  ) : null}
                 </>
               )}
             </div>
@@ -1727,40 +1723,34 @@ const [visibleComments, setVisibleComments] = useState(5);
                   ))}
 
                   {comments.length > visibleComments && (
-    <div className="flex justify-center mt-4">
-      <button
-        className="px-4 py-2 rounded bg-emerald-700 text-white hover:bg-emerald-800 transition"
-        onClick={() => setVisibleComments((v) => v + 5)}
-      >
-        Show More Comments
-      </button>
-    </div>
-  )}
+                    <div className="flex justify-center mt-4">
+                      <button
+                        className="px-4 py-2 rounded bg-emerald-700 text-white hover:bg-emerald-800 transition"
+                        onClick={() => setVisibleComments((v) => v + 5)}
+                      >
+                        Show More Comments
+                      </button>
+                    </div>
+                  )}
                 </div>
 
+                {/* space for You may Also Like  */}
 
-
-                 {/* space for You may Also Like  */}
-
-                  <div className="mt-12">
-                    <h2 className="text-xl font-semibold mb-4">
-                      You Also Like
-                    </h2>
-                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-                      {movies
-                        .filter((m) => m.id !== currentMovie?.id) // Exclude current movie
-                        .slice(0, 20)
-                        .map((movie) => (
-                          <MovieCard
-                            key={movie.id}
-                            movie={movie}
-                            onClick={() =>
-                              router.push(`/play/${movie.id}/movie`)
-                            }
-                          />
-                        ))}
-                    </div>
+                <div className="mt-12">
+                  <h2 className="text-xl font-semibold mb-4">You Also Like</h2>
+                  <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+                    {movies
+                      .filter((m) => m.id !== currentMovie?.id) // Exclude current movie
+                      .slice(0, 30)
+                      .map((movie) => (
+                        <MovieCard
+                          key={movie.id}
+                          movie={movie}
+                          onClick={() => router.push(`/play/${movie.id}/movie`)}
+                        />
+                      ))}
                   </div>
+                </div>
               </div>
             </div>
           </div>

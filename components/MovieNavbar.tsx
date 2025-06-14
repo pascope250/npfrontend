@@ -1,6 +1,6 @@
 // for client
 "use client";
-
+import { FaWhatsapp } from "react-icons/fa";
 import Link from "next/link";
 import { useState, useEffect, useRef } from "react";
 import { Movie, useMovieContext } from "@/context/movieContext";
@@ -18,7 +18,10 @@ const MovieNavbar = () => {
   // Close suggestions when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (searchRef.current && !searchRef.current.contains(event.target as Node)) {
+      if (
+        searchRef.current &&
+        !searchRef.current.contains(event.target as Node)
+      ) {
         setShowSuggestions(false);
       }
     };
@@ -56,7 +59,10 @@ const MovieNavbar = () => {
           HobbyVb
         </Link>
 
-        <Link href="/" className="sm:block lg:hidden text-2xl font-bold text-white hover:text-emerald-400 transition-colors">
+        <Link
+          href="/"
+          className="sm:block lg:hidden text-2xl font-bold text-white hover:text-emerald-400 transition-colors"
+        >
           MH
         </Link>
 
@@ -145,8 +151,19 @@ const MovieNavbar = () => {
           >
             YouTube Videos
           </Link>
+
+          <a
+            href="https://whatsapp.com/channel/0029Vb6rsTmGufIse0MGrx3g"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-2 text-white hover:text-green-400 transition-colors font-medium"
+            title="Join us on WhatsApp"
+          >
+            <FaWhatsapp className="w-5 h-5" />
+            
+          </a>
+
           <NotificationBell />
-          
         </div>
 
         {/* Mobile Menu Button */}
@@ -194,6 +211,17 @@ const MovieNavbar = () => {
           >
             YouTube Videos
           </Link>
+
+          <a
+      href="https://whatsapp.com/channel/0029Vb6rsTmGufIse0MGrx3g"
+      target="_blank"
+      rel="noopener noreferrer"
+      className="flex items-center gap-2 text-white hover:text-green-400 transition-colors py-2"
+      title="Join us on WhatsApp"
+    >
+      <FaWhatsapp className="w-5 h-5" />
+      WhatsApp
+    </a>
           <NotificationBell />
         </div>
       )}
