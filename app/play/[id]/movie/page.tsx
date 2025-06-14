@@ -1751,6 +1751,8 @@ const MoviePlayerPage = () => {
                       ))}
                   </div>
                 </div>
+
+                <GoogleAd/>
               </div>
             </div>
           </div>
