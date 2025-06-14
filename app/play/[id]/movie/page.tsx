@@ -706,6 +706,7 @@ import { toast, Toaster } from "react-hot-toast";
 // import VideoPlayer from "@/components/VideoPlayer";
 import DirectVideoPlayer from "@/components/DirectVideoPlayer";
 import GoogleAd from "@/components/ads/GoogleAd";
+import MovieCard from "@/components/MovieCard";
 
 const MoviePlayerPage = () => {
   const {
@@ -729,7 +730,7 @@ const MoviePlayerPage = () => {
   const [comments, setComments] = useState<Comment[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [videoUrl, setVideoUrl] = useState("");
-
+const [visibleComments, setVisibleComments] = useState(5);
   const [replyingTo, setReplyingTo] = useState<number | null>(null);
   const [replyText, setReplyText] = useState("");
   const param = useParams();
@@ -818,7 +819,7 @@ const MoviePlayerPage = () => {
     }
   };
 
-  const handleReplyLike = async (commentId:string, replyId: string) => {
+  const handleReplyLike = async (commentId: string, replyId: string) => {
     try {
       setIsLoading(true);
       await addReplyLike(commentId, replyId);
@@ -875,7 +876,6 @@ const MoviePlayerPage = () => {
       setReplyText("");
       toast.success("Reply posted successfully!");
     } catch (error) {
-
       console.error("Error adding reply:", error);
       toast.error("Failed to post reply");
     } finally {
@@ -935,6 +935,7 @@ const MoviePlayerPage = () => {
     }
   };
 
+  
   useEffect(() => {
     const fetchVideo = async () => {
       if (!currentMovie?.source?.[currentSourceIndex]) return;
@@ -987,88 +988,111 @@ const MoviePlayerPage = () => {
     router.push(`/download/${currentMovie?.id}/${part}`);
   };
 
-
-
-// Skeleton Loader Component
-function MoviePlayerSkeleton() {
-  return (
-    <div className="min-h-screen bg-gray-900 text-gray-100">
-      <div className="container mx-auto px-4 py-8" id="movie-player">
-        <div className="flex flex-col lg:flex-row gap-8">
-          {/* Main Movie Player Skeleton */}
-          <div className="lg:w-2/3">
-            {/* Video Player Placeholder */}
-            <div className="relative bg-gray-800 aspect-video w-full rounded-xl overflow-hidden shadow-2xl mb-6">
-              <div className="absolute inset-0 bg-gradient-to-br from-gray-800 via-gray-700 to-gray-800 animate-pulse" />
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="w-16 h-16 rounded-full bg-gray-700/70 border-4 border-gray-600/50 animate-pulse" />
+  // Skeleton Loader Component
+  function MoviePlayerSkeleton() {
+    return (
+      <div className="min-h-screen bg-gray-900 text-gray-100">
+        <div className="container mx-auto px-4 py-8" id="movie-player">
+          <div className="flex flex-col lg:flex-row gap-8">
+            {/* Main Movie Player Skeleton */}
+            <div className="lg:w-2/3">
+              {/* Video Player Placeholder */}
+              <div className="relative bg-gray-800 aspect-video w-full rounded-xl overflow-hidden shadow-2xl mb-6">
+                <div className="absolute inset-0 bg-gradient-to-br from-gray-800 via-gray-700 to-gray-800 animate-pulse" />
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <div className="w-16 h-16 rounded-full bg-gray-700/70 border-4 border-gray-600/50 animate-pulse" />
+                </div>
               </div>
-            </div>
-            
-            {/* Movie Info Section */}
-            <div className="mt-6 space-y-6">
-              <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-                <div className="space-y-3">
-                  <div className="h-8 w-64 bg-gray-700 rounded-full animate-pulse" />
-                  <div className="flex items-center gap-4">
-                    <div className="h-5 w-20 bg-gray-700 rounded-full animate-pulse" />
-                    <div className="h-5 w-24 bg-gray-700 rounded-full animate-pulse" />
-                    <div className="h-5 w-16 bg-gray-700 rounded-full animate-pulse" />
+
+              {/* Movie Info Section */}
+              <div className="mt-6 space-y-6">
+                <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                  <div className="space-y-3">
+                    <div className="h-8 w-64 bg-gray-700 rounded-full animate-pulse" />
+                    <div className="flex items-center gap-4">
+                      <div className="h-5 w-20 bg-gray-700 rounded-full animate-pulse" />
+                      <div className="h-5 w-24 bg-gray-700 rounded-full animate-pulse" />
+                      <div className="h-5 w-16 bg-gray-700 rounded-full animate-pulse" />
+                    </div>
+                  </div>
+                  <div className="flex gap-3">
+                    <div className="h-11 w-32 bg-gray-700 rounded-lg animate-pulse" />
+                    <div className="h-11 w-32 bg-gray-700 rounded-lg animate-pulse" />
                   </div>
                 </div>
-                <div className="flex gap-3">
-                  <div className="h-11 w-32 bg-gray-700 rounded-lg animate-pulse" />
-                  <div className="h-11 w-32 bg-gray-700 rounded-lg animate-pulse" />
+
+                {/* Description */}
+                <div className="bg-gray-800/80 rounded-xl p-5 space-y-3">
+                  <div className="h-6 w-40 bg-gray-700 rounded-full animate-pulse" />
+                  <div className="space-y-2">
+                    <div className="h-4 w-full bg-gray-700 rounded-full animate-pulse" />
+                    <div className="h-4 w-5/6 bg-gray-700 rounded-full animate-pulse" />
+                    <div className="h-4 w-2/3 bg-gray-700 rounded-full animate-pulse" />
+                  </div>
                 </div>
-              </div>
-              
-              {/* Description */}
-              <div className="bg-gray-800/80 rounded-xl p-5 space-y-3">
-                <div className="h-6 w-40 bg-gray-700 rounded-full animate-pulse" />
-                <div className="space-y-2">
-                  <div className="h-4 w-full bg-gray-700 rounded-full animate-pulse" />
-                  <div className="h-4 w-5/6 bg-gray-700 rounded-full animate-pulse" />
-                  <div className="h-4 w-2/3 bg-gray-700 rounded-full animate-pulse" />
-                </div>
-              </div>
-              
-              {/* Comments Section */}
-              <div className="space-y-6">
-                <div className="h-7 w-40 bg-gray-700 rounded-full animate-pulse mb-2" />
-                
-                {/* Add Comment */}
-                <div className="bg-gray-800/80 rounded-xl p-5 shadow-lg">
-                  <div className="flex gap-4">
-                    <div className="w-12 h-12 rounded-full bg-gray-700 animate-pulse flex-shrink-0" />
-                    <div className="flex-1 space-y-3">
-                      <div className="h-5 w-1/3 bg-gray-700 rounded-full animate-pulse" />
-                      <div className="h-20 w-full bg-gray-700 rounded-xl animate-pulse" />
-                      <div className="flex justify-end">
-                        <div className="h-9 w-28 bg-gray-700 rounded-lg animate-pulse" />
+
+                {/* Comments Section */}
+                <div className="space-y-6">
+                  <div className="h-7 w-40 bg-gray-700 rounded-full animate-pulse mb-2" />
+
+                  {/* Add Comment */}
+                  <div className="bg-gray-800/80 rounded-xl p-5 shadow-lg">
+                    <div className="flex gap-4">
+                      <div className="w-12 h-12 rounded-full bg-gray-700 animate-pulse flex-shrink-0" />
+                      <div className="flex-1 space-y-3">
+                        <div className="h-5 w-1/3 bg-gray-700 rounded-full animate-pulse" />
+                        <div className="h-20 w-full bg-gray-700 rounded-xl animate-pulse" />
+                        <div className="flex justify-end">
+                          <div className="h-9 w-28 bg-gray-700 rounded-lg animate-pulse" />
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-                
-                {/* Comments List */}
-                <div className="space-y-4">
-                  {[...Array(3)].map((_, i) => (
-                    <div
-                      key={i}
-                      className="bg-gray-800/60 rounded-xl p-4 shadow-sm border border-gray-700/30"
-                    >
-                      <div className="flex gap-3">
-                        <div className="w-10 h-10 rounded-full bg-gray-700 animate-pulse flex-shrink-0" />
-                        <div className="flex-1 space-y-2">
-                          <div className="flex items-center gap-3">
-                            <div className="h-4 w-28 bg-gray-700 rounded-full animate-pulse" />
-                            <div className="h-3 w-16 bg-gray-700 rounded-full animate-pulse" />
-                          </div>
-                          <div className="space-y-1.5">
-                            <div className="h-4 w-3/4 bg-gray-700 rounded-full animate-pulse" />
-                            <div className="h-4 w-full bg-gray-700 rounded-full animate-pulse" />
+
+                  {/* Comments List */}
+                  <div className="space-y-4">
+                    {[...Array(3)].map((_, i) => (
+                      <div
+                        key={i}
+                        className="bg-gray-800/60 rounded-xl p-4 shadow-sm border border-gray-700/30"
+                      >
+                        <div className="flex gap-3">
+                          <div className="w-10 h-10 rounded-full bg-gray-700 animate-pulse flex-shrink-0" />
+                          <div className="flex-1 space-y-2">
+                            <div className="flex items-center gap-3">
+                              <div className="h-4 w-28 bg-gray-700 rounded-full animate-pulse" />
+                              <div className="h-3 w-16 bg-gray-700 rounded-full animate-pulse" />
+                            </div>
+                            <div className="space-y-1.5">
+                              <div className="h-4 w-3/4 bg-gray-700 rounded-full animate-pulse" />
+                              <div className="h-4 w-full bg-gray-700 rounded-full animate-pulse" />
+                            </div>
                           </div>
                         </div>
+                      </div>
+                    ))}
+                  </div>
+
+                 
+                </div>
+              </div>
+            </div>
+
+            {/* Sidebar */}
+            <div className="lg:w-1/3">
+              <div className="bg-gray-800/80 rounded-xl p-5 sticky top-6 space-y-5">
+                <div className="h-7 w-40 bg-gray-700 rounded-full animate-pulse" />
+                <div className="space-y-4">
+                  {[...Array(4)].map((_, i) => (
+                    <div
+                      key={i}
+                      className="flex gap-3 p-2 rounded-lg hover:bg-gray-700/30 transition-colors"
+                    >
+                      <div className="w-20 h-28 bg-gray-700 rounded-lg animate-pulse flex-shrink-0" />
+                      <div className="flex-1 space-y-2">
+                        <div className="h-5 w-32 bg-gray-700 rounded-full animate-pulse" />
+                        <div className="h-4 w-24 bg-gray-700 rounded-full animate-pulse" />
+                        <div className="h-4 w-20 bg-gray-700 rounded-full animate-pulse" />
                       </div>
                     </div>
                   ))}
@@ -1076,35 +1100,14 @@ function MoviePlayerSkeleton() {
               </div>
             </div>
           </div>
-          
-          {/* Sidebar */}
-          <div className="lg:w-1/3">
-            <div className="bg-gray-800/80 rounded-xl p-5 sticky top-6 space-y-5">
-              <div className="h-7 w-40 bg-gray-700 rounded-full animate-pulse" />
-              <div className="space-y-4">
-                {[...Array(4)].map((_, i) => (
-                  <div
-                    key={i}
-                    className="flex gap-3 p-2 rounded-lg hover:bg-gray-700/30 transition-colors"
-                  >
-                    <div className="w-20 h-28 bg-gray-700 rounded-lg animate-pulse flex-shrink-0" />
-                    <div className="flex-1 space-y-2">
-                      <div className="h-5 w-32 bg-gray-700 rounded-full animate-pulse" />
-                      <div className="h-4 w-24 bg-gray-700 rounded-full animate-pulse" />
-                      <div className="h-4 w-20 bg-gray-700 rounded-full animate-pulse" />
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
         </div>
       </div>
-    </div>
-  );
-}
+    );
+  }
 
-  return loading ? <MoviePlayerSkeleton /> :  (
+  return loading ? (
+    <MoviePlayerSkeleton />
+  ) : (
     <div className="min-h-screen bg-gray-900 text-gray-100">
       <Head>
         <title>{currentMovie?.title} | My Hobbies</title>
@@ -1144,6 +1147,7 @@ function MoviePlayerSkeleton() {
                       width="100%"
                       height="100%"
                       className="aspect-video"
+                      allowFullScreen
                     />
                   ) : // <VideoPlayer isLoading={isLoading} videoUrl={videoUrl} />
                   // is endwith MP4, WebM, MKV, AVI, MOV, FLV, WMV
@@ -1176,7 +1180,16 @@ function MoviePlayerSkeleton() {
                       }
                       isLoading={isLoading}
                     />
-                  ) : null}
+                  ) : currentMovie?.source[currentSourceIndex].isIframe ? (
+                    <Iframe
+                      url={`${currentMovie?.source[currentSourceIndex].domain}${currentMovie?.source[currentSourceIndex].baseUrl}`}
+                      width="100%"
+                      height="100%"
+                      className="aspect-video"
+                      allowFullScreen
+                    />
+                  ) : null
+                  }
                 </>
               )}
             </div>
@@ -1397,7 +1410,7 @@ function MoviePlayerSkeleton() {
                 <p className="text-gray-300">{currentMovie?.description}</p>
               </div>
 
-              <GoogleAd/>
+              <GoogleAd />
 
               {/* Comments Section */}
               <div className="mt-8">
@@ -1464,7 +1477,7 @@ function MoviePlayerSkeleton() {
 
                 {/* Comments List */}
                 <div className="space-y-4">
-                  {comments.map((comment) => (
+                  {comments.slice(0, visibleComments).map((comment) => (
                     <div
                       key={comment.id}
                       className="bg-gray-800/80 rounded-xl p-4 shadow-md border border-gray-700/50 hover:border-gray-600 transition-colors duration-200"
@@ -1555,7 +1568,9 @@ function MoviePlayerSkeleton() {
                               </svg>
                               <span>
                                 Like
-                                {comment.commentLike ? ` (${comment.commentLike})` : ""}
+                                {comment.commentLike
+                                  ? ` (${comment.commentLike})`
+                                  : ""}
                               </span>
                             </button>
                             <button
@@ -1665,7 +1680,12 @@ function MoviePlayerSkeleton() {
                                   <div className="mt-2 flex items-center gap-2 text-xs">
                                     <button
                                       className="text-gray-400 hover:text-emerald-400 transition-colors flex items-center gap-1 cursor-pointer"
-                                      onClick={() => handleReplyLike(reply.commentId, reply.id)}
+                                      onClick={() =>
+                                        handleReplyLike(
+                                          reply.commentId,
+                                          reply.id
+                                        )
+                                      }
                                     >
                                       <svg
                                         className="w-4 h-4"
@@ -1682,7 +1702,9 @@ function MoviePlayerSkeleton() {
                                       </svg>
                                       <span>
                                         Like
-                                        {reply.replyLike ? ` (${reply.replyLike})` : ""}
+                                        {reply.replyLike
+                                          ? ` (${reply.replyLike})`
+                                          : ""}
                                       </span>
                                     </button>
                                     {/* <button
@@ -1703,7 +1725,42 @@ function MoviePlayerSkeleton() {
                       </div>
                     </div>
                   ))}
+
+                  {comments.length > visibleComments && (
+    <div className="flex justify-center mt-4">
+      <button
+        className="px-4 py-2 rounded bg-emerald-700 text-white hover:bg-emerald-800 transition"
+        onClick={() => setVisibleComments((v) => v + 5)}
+      >
+        Show More Comments
+      </button>
+    </div>
+  )}
                 </div>
+
+
+
+                 {/* space for You may Also Like  */}
+
+                  <div className="mt-12">
+                    <h2 className="text-xl font-semibold mb-4">
+                      You Also Like
+                    </h2>
+                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+                      {movies
+                        .filter((m) => m.id !== currentMovie?.id) // Exclude current movie
+                        .slice(0, 20)
+                        .map((movie) => (
+                          <MovieCard
+                            key={movie.id}
+                            movie={movie}
+                            onClick={() =>
+                              router.push(`/play/${movie.id}/movie`)
+                            }
+                          />
+                        ))}
+                    </div>
+                  </div>
               </div>
             </div>
           </div>
@@ -1714,53 +1771,52 @@ function MoviePlayerSkeleton() {
               <h2 className="text-xl font-semibold mb-4">More Like This</h2>
               <div className="space-y-4">
                 {relatedMovies.map((movie, index) => (
-  <React.Fragment key={movie.id}>
-    <div
-      onClick={() => router.push(`/play/${movie.id}/movie`)}
-      className="flex cursor-pointer hover:bg-gray-700 p-2 rounded-lg transition-colors"
-    >
-      <div className="w-20 h-28 bg-gray-700 rounded-md flex-shrink-0 overflow-hidden">
-        <Image
-          src={movie.poster}
-          alt={movie.title}
-          width={100}
-          height={150}
-          unoptimized
-          className="w-full h-full object-cover"
-        />
-      </div>
-      <div className="ml-3 flex flex-col justify-between">
-        <div>
-          <h3 className="font-medium">{movie.title}</h3>
-          <div className="flex items-center mt-1 text-sm text-gray-400">
-            <span>{movie.year}</span>
-            <span className="mx-2">•</span>
-            <span>{movie.rating}</span>
-          </div>
-        </div>
-        <button className="mt-2 text-sm text-emerald-400 hover:text-emerald-300 flex items-center">
-          <svg
-            className="w-4 h-4 mr-1"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"
-            />
-          </svg>
-          Watch Now
-        </button>
-      </div>
-    </div>
-
-    {(index + 1) % 3 === 0 && <GoogleAd />} {/* Show ad after every 3 movies */}
-  </React.Fragment>
-))}
-
+                  <React.Fragment key={movie.id}>
+                    <div
+                      onClick={() => router.push(`/play/${movie.id}/movie`)}
+                      className="flex cursor-pointer hover:bg-gray-700 p-2 rounded-lg transition-colors"
+                    >
+                      <div className="w-20 h-28 bg-gray-700 rounded-md flex-shrink-0 overflow-hidden">
+                        <Image
+                          src={movie.poster}
+                          alt={movie.title}
+                          width={100}
+                          height={150}
+                          unoptimized
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                      <div className="ml-3 flex flex-col justify-between">
+                        <div>
+                          <h3 className="font-medium">{movie.title}</h3>
+                          <div className="flex items-center mt-1 text-sm text-gray-400">
+                            <span>{movie.year}</span>
+                            <span className="mx-2">•</span>
+                            <span>{movie.rating}</span>
+                          </div>
+                        </div>
+                        <button className="mt-2 text-sm text-emerald-400 hover:text-emerald-300 flex items-center">
+                          <svg
+                            className="w-4 h-4 mr-1"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"
+                            />
+                          </svg>
+                          Watch Now
+                        </button>
+                      </div>
+                    </div>
+                    {(index + 1) % 3 === 0 && <GoogleAd />}{" "}
+                    {/* Show ad after every 3 movies */}
+                  </React.Fragment>
+                ))}
               </div>
             </div>
           </div>

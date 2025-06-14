@@ -1,4 +1,14 @@
+import { useEffect } from 'react';
+
 const AdInFeed = () => {
+  useEffect(() => {
+    try {
+      (window.adsbygoogle = window.adsbygoogle || []).push({});
+    } catch (e) {
+      console.error('AdSense error', e);
+    }
+  }, []);
+
   return (
     <div className="my-10 text-center">
       <ins
@@ -9,11 +19,6 @@ const AdInFeed = () => {
         data-ad-format="fluid"
         data-ad-layout-key="-fb+5w+4e-db+86"
       ></ins>
-      <script
-        dangerouslySetInnerHTML={{
-          __html: `(adsbygoogle = window.adsbygoogle || []).push({});`,
-        }}
-      />
     </div>
   );
 };

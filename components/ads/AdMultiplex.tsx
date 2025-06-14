@@ -1,4 +1,14 @@
+import { useEffect } from 'react';
+
 const AdMultiplex = () => {
+  useEffect(() => {
+    try {
+      (window.adsbygoogle = window.adsbygoogle || []).push({});
+    } catch (e) {
+      console.error('AdSense error', e);
+    }
+  }, []);
+
   return (
     <div className="my-10 text-center">
       <ins
@@ -9,12 +19,8 @@ const AdMultiplex = () => {
         data-ad-format="autorelaxed"
         data-full-width-responsive="true"
       ></ins>
-      <script
-        dangerouslySetInnerHTML={{
-          __html: `(adsbygoogle = window.adsbygoogle || []).push({});`,
-        }}
-      />
     </div>
   );
 };
+
 export default AdMultiplex;

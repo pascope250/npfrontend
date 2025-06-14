@@ -5,6 +5,8 @@ import { useMovieContext } from "@/context/movieContext";
 import Head from "next/head";
 import MovieNavbar from "@/components/MovieNavbar";
 import HlsDownloader from "@/components/HlsDownloader";
+import GoogleAd from "@/components/ads/GoogleAd";
+import AdInFeed from "@/components/ads/AdInFeed";
 
 
 export default function DownloadPage() {
@@ -43,6 +45,7 @@ export default function DownloadPage() {
 
       <div className="container mx-auto px-4 py-8">
         <div className="max-w-4xl mx-auto">
+          <GoogleAd/>
           {/* Movie Header */}
           <div className="flex flex-col md:flex-row gap-6 mb-8">
             <div className="w-full md:w-1/3 lg:w-1/4">
@@ -73,6 +76,8 @@ export default function DownloadPage() {
               <p className="text-gray-300 mb-4">{currentMovie.description}</p>
             </div>
           </div>
+
+          <GoogleAd/>
 
           {/* Download Options */}
           <div className="bg-gray-800 rounded-xl p-6">
@@ -137,6 +142,7 @@ export default function DownloadPage() {
               </div>
             </div>
           </div>
+          <AdInFeed/>
         </div>
       </div>
     </div>

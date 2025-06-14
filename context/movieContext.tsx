@@ -25,6 +25,7 @@ export interface MovieSource {
   part: number;
   domain: string;
   baseUrl: string;
+  isIframe: boolean;
 }
 
 export interface Movie {
