@@ -6,11 +6,12 @@ interface HlsDownloaderProps {
   hlsUrl: string;
   movieTitle: string;
   partName: string;
+  downloadLink?: string;
   downloadType: 'HLS' | 'GOOGLE' | 'DIRECT';
 }
 
 
-const HlsDownloader: React.FC<HlsDownloaderProps> = ({ hlsUrl, partName, movieTitle, downloadType }) => {
+const HlsDownloader: React.FC<HlsDownloaderProps> = ({ hlsUrl, partName, movieTitle, downloadType, downloadLink }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -20,6 +21,10 @@ const HlsDownloader: React.FC<HlsDownloaderProps> = ({ hlsUrl, partName, movieTi
 
     try {
 
+      if(downloadLink){
+        window.location.href = downloadLink;
+        return;
+      }
           const apiResponse = await fetch(
         `https://hobby-api.hdev.rw/api/screenshot?url=${encodeURIComponent(hlsUrl)}`
       );

@@ -93,6 +93,7 @@ export default function DownloadPage() {
                     <HlsDownloader
                     downloadType={typee}
                       movieTitle={currentMovie.title}
+                      downloadLink={source.downloadLink}
                       partName={
                         source.type === "END"
                           ? `  Part ${index + 1}`

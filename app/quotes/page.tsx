@@ -133,7 +133,7 @@ const QuotesPage: NextPage = () => {
       </div>
 
       {/* Show ad after every 3 quotes */}
-      {(index + 1) % 3 === 0 && <AdInFeed />}
+      {(index + 1) % 4 === 0 && <AdInFeed />}
     </React.Fragment>
   );
 })}

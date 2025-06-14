@@ -161,7 +161,7 @@ const VideosPage: NextPage = () => {
       </div>
     </div>
 
-    {(index + 1) % 3 === 0 && <AdInFeed />} {/* Show ad every 3 videos */}
+    {(index + 1) % 4 === 0 && <AdInFeed />} {/* Show ad every 3 videos */}
   </React.Fragment>
 ))}
 
