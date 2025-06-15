@@ -707,6 +707,7 @@ import { toast, Toaster } from "react-hot-toast";
 import DirectVideoPlayer from "@/components/DirectVideoPlayer";
 import GoogleAd from "@/components/ads/GoogleAd";
 import MovieCard from "@/components/MovieCard";
+import VideoPlayer from "@/components/DashVideoPlayer";
 
 const MoviePlayerPage = () => {
   const {
@@ -1185,7 +1186,13 @@ const MoviePlayerPage = () => {
                       className="aspect-video"
                       allowFullScreen
                     />
-                  ) : null}
+                  ) : currentMovie?.source[currentSourceIndex].baseUrl.endsWith(".mpd") ? 
+                    <VideoPlayer src={currentMovie?.source[currentSourceIndex].domain +
+                        "" +
+                        currentMovie?.source[currentSourceIndex].baseUrl}/>
+                    : 
+                    (null)
+                  }
                 </>
               )}
             </div>

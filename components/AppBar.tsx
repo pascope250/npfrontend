@@ -42,7 +42,7 @@ export default function AppBar() {
   return (
     <div className="fixed top-0 right-0 p-4 z-50 flex gap-2">
       <NotificationOverlay />
-      <NotificationBell />
+      {/* <NotificationBell /> */}
       {/* Optional: Show registration status */}
       <div className="text-xs">{swRegistered ? 'SW ✅' : 'SW ❌'}</div>
     </div>
