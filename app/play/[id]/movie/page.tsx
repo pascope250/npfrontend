@@ -1158,7 +1158,11 @@ const MoviePlayerPage = () => {
   );
 
   return loading ? (
+    <>
+    <MovieNavbar />
     <MoviePlayerSkeleton />
+    </>
+    
   ) : (
     <div className="min-h-screen bg-gray-900 text-gray-100">
       <Head>
