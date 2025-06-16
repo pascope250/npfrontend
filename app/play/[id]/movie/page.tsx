@@ -710,7 +710,7 @@ import MovieCard from "@/components/MovieCard";
 import VideoPlayer from "@/components/DashVideoPlayer";
 import Script from "next/script";
 
-const MoviePlayerPage = ({ params }: { params: { id: string } }) => {
+const MoviePlayerPage = () => {
   const {
     loading,
     movies,
@@ -1306,7 +1306,7 @@ const MoviePlayerPage = ({ params }: { params: { id: string } }) => {
                      <a
                       href={`whatsapp://send?text=Watch ${encodeURIComponent(
                         currentMovie?.title || "this movie"
-                      )} on ${window.location.origin}/play/${params.id}/movie`}
+                      )} on ${window.location.origin}/play/${currentMovie?.id}/movie`}
                       className="bg-green-600 hover:bg-green-700 text-white p-2 rounded-full transition-colors duration-200"
                       target="_blank"
                       rel="noopener noreferrer"
@@ -1318,7 +1318,7 @@ const MoviePlayerPage = ({ params }: { params: { id: string } }) => {
                     {/* Facebook Share */}
                     <a
                       href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
-                        `${window.location.origin}/play/${params.id}/movie`
+                        `${window.location.origin}/play/${currentMovie?.id}/movie`
                       )}`}
                       className="bg-blue-600 hover:bg-blue-700 text-white p-2 rounded-full transition-colors duration-200"
                       target="_blank"
@@ -1333,7 +1333,7 @@ const MoviePlayerPage = ({ params }: { params: { id: string } }) => {
                       href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(
                         `Watch ${currentMovie?.title || "this movie"}`
                       )}&url=${encodeURIComponent(
-                        `${window.location.origin}/play/${params.id}/movie`
+                        `${window.location.origin}/play/${currentMovie?.id}/movie`
                       )}`}
                       className="bg-blue-400 hover:bg-blue-500 text-white p-2 rounded-full transition-colors duration-200"
                       target="_blank"
