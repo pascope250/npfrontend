@@ -16,9 +16,8 @@ export default async function handler(
   }
 
   try {
-    // Handle WixMP videos differently
+    // Handle WixMP videos as direct downloads
     if (isWixMP === 'true') {
-      // For WixMP, we expect a direct video URL
       const videoResponse = await fetch(m3u8Url);
       if (!videoResponse.ok) {
         throw new Error(`Failed to fetch video: ${videoResponse.statusText}`);
@@ -33,19 +32,17 @@ export default async function handler(
 
       if (videoResponse.body) {
         await new Promise((resolve, reject) => {
-          if (videoResponse.body) {
-            videoResponse.body.pipe(res);
-            videoResponse.body.on('end', resolve);
-            videoResponse.body.on('error', reject);
-          } else {
-            reject(new Error('Video response body is null'));
-          }
+          videoResponse.body!.pipe(res);
+          videoResponse.body!.on('end', resolve);
+          videoResponse.body!.on('error', reject);
         });
+      } else {
+        throw new Error('No response body from video source');
       }
       return;
     }
 
-    // Original HLS handling code remains the same
+    // Original HLS handling remains unchanged
     const playlistResponse = await fetch(m3u8Url);
     if (!playlistResponse.ok) {
       throw new Error(`Failed to fetch playlist: ${playlistResponse.statusText}`);

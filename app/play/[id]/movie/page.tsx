@@ -708,8 +708,9 @@ import DirectVideoPlayer from "@/components/DirectVideoPlayer";
 import GoogleAd from "@/components/ads/GoogleAd";
 import MovieCard from "@/components/MovieCard";
 import VideoPlayer from "@/components/DashVideoPlayer";
+import Script from "next/script";
 
-const MoviePlayerPage = () => {
+const MoviePlayerPage = ({ params }: { params: { id: string } }) => {
   const {
     loading,
     movies,
@@ -1103,13 +1104,82 @@ const MoviePlayerPage = () => {
     );
   }
 
+  // Add JSON-LD structured data
+  const [structuredData, setStructuredData] = useState<string>("");
+
+  useEffect(() => {
+    if (currentMovie) {
+      const jsonLd = {
+        "@context": "https://schema.org",
+        "@type": "Movie",
+        name: currentMovie.title,
+        description: currentMovie.description,
+        image: currentMovie.poster,
+        dateCreated: currentMovie.year ? `${currentMovie.year}` : undefined,
+        aggregateRating: {
+          "@type": "AggregateRating",
+          ratingValue: currentMovie.rating,
+          bestRating: "10",
+          ratingCount: "1000",
+        },
+        genre: currentMovie.categoryName,
+        potentialAction: {
+          "@type": "WatchAction",
+          target: `${window.location.origin}/play/${currentMovie.id}`,
+        },
+      };
+      setStructuredData(JSON.stringify(jsonLd));
+    }
+  }, [currentMovie]);
+
+  // Simple SVG icons (or use from your icon library)
+  const StarIcon = ({ className }: { className?: string }) => (
+    <svg className={className} fill="currentColor" viewBox="0 0 20 20">
+      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+    </svg>
+  );
+
+  const WhatsAppIcon = ({ className }: { className?: string }) => (
+    <svg className={className} fill="currentColor" viewBox="0 0 24 24">
+      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+    </svg>
+  );
+
+  const FacebookIcon = ({ className }: { className?: string }) => (
+    <svg className={className} fill="currentColor" viewBox="0 0 24 24">
+      <path d="M22.675 0h-21.35c-.732 0-1.325.593-1.325 1.325v21.351c0 .731.593 1.324 1.325 1.324h11.495v-9.294h-3.128v-3.622h3.128v-2.671c0-3.1 1.893-4.788 4.659-4.788 1.325 0 2.463.099 2.795.143v3.24l-1.918.001c-1.504 0-1.795.715-1.795 1.763v2.313h3.587l-.467 3.622h-3.12v9.293h6.116c.73 0 1.323-.593 1.323-1.325v-21.35c0-.732-.593-1.325-1.325-1.325z" />
+    </svg>
+  );
+
+  const TwitterIcon = ({ className }: { className?: string }) => (
+    <svg className={className} fill="currentColor" viewBox="0 0 24 24">
+      <path d="M8.29 20.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0022 5.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.072 4.072 0 012.8 9.713v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 012 18.407a11.616 11.616 0 006.29 1.84" />
+    </svg>
+  );
+
   return loading ? (
     <MoviePlayerSkeleton />
   ) : (
     <div className="min-h-screen bg-gray-900 text-gray-100">
       <Head>
-        <title>{currentMovie?.title} | My Hobbies</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta
+          property="og:url"
+          content={`${window.location.origin}/play/${currentMovie?.id}`}
+        />
+        <link
+          rel="canonical"
+          href={`${window.location.origin}/play/${currentMovie?.id}/movie`}
+        />
       </Head>
+
+      {structuredData && (
+        <Script
+          id="movie-structured-data"
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: structuredData }}
+        />
+      )}
       <MovieNavbar />
       <Toaster />
       <div className="container mx-auto px-4 py-6" id="movie-player">
@@ -1186,13 +1256,17 @@ const MoviePlayerPage = () => {
                       className="aspect-video"
                       allowFullScreen
                     />
-                  ) : currentMovie?.source[currentSourceIndex].baseUrl.endsWith(".mpd") ? 
-                    <VideoPlayer src={currentMovie?.source[currentSourceIndex].domain +
+                  ) : currentMovie?.source[currentSourceIndex].baseUrl.endsWith(
+                      ".mpd"
+                    ) ? (
+                    <VideoPlayer
+                      src={
+                        currentMovie?.source[currentSourceIndex].domain +
                         "" +
-                        currentMovie?.source[currentSourceIndex].baseUrl}/>
-                    : 
-                    (null)
-                  }
+                        currentMovie?.source[currentSourceIndex].baseUrl
+                      }
+                    />
+                  ) : null}
                 </>
               )}
             </div>
@@ -1200,19 +1274,78 @@ const MoviePlayerPage = () => {
             {/* Movie Info */}
             <div className="mt-6">
               <div className="flex flex-col md:flex-row md:items-center justify-between">
-                <div>
-                  <h1 className="text-2xl font-bold">
-                    {currentMovie?.title}{" "}
-                    <span className="text-gray-400">
-                      {currentMovie?.year && `(${currentMovie?.year})`}
-                    </span>
-                  </h1>
-                  <div className="flex items-center mt-2 space-x-4 text-sm">
-                    <span className="bg-emerald-600 text-white px-2 py-1 rounded">
-                      {currentMovie?.rating} / 10
-                    </span>
-                    <span>{currentMovie?.categoryName}</span>
+                <div className="space-y-3">
+                  {/* Title with Year */}
+                  <div className="flex items-baseline gap-2">
+                    <h1 className="text-2xl font-bold text-white truncate">
+                      {currentMovie?.title}
+                    </h1>
+                    {currentMovie?.year && (
+                      <span className="text-gray-400 text-lg whitespace-nowrap">
+                        ({currentMovie.year})
+                      </span>
+                    )}
                   </div>
+
+                  {/* Rating and Category */}
+                  <div className="flex flex-wrap items-center gap-3">
+                    {currentMovie?.rating && (
+                      <span className="bg-emerald-600 text-white px-3 py-1 rounded-full text-sm font-medium flex items-center">
+                        <StarIcon className="w-4 h-4 mr-1" />
+                        {currentMovie.rating}/10
+                      </span>
+                    )}
+                    {currentMovie?.categoryName && (
+                      <span className="text-gray-300 text-sm bg-gray-700 px-3 py-1 rounded-full">
+                        {currentMovie.categoryName}
+                      </span>
+                    )}
+                     {/* Social Sharing Buttons */}
+                      <span className="text-gray-400 text-sm mr-1">Share:</span>
+
+                     <a
+                      href={`whatsapp://send?text=Watch ${encodeURIComponent(
+                        currentMovie?.title || "this movie"
+                      )} on ${window.location.origin}/play/${params.id}/movie`}
+                      className="bg-green-600 hover:bg-green-700 text-white p-2 rounded-full transition-colors duration-200"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label="Share on WhatsApp"
+                    >
+                      <WhatsAppIcon className="w-5 h-5" />
+                    </a>
+
+                    {/* Facebook Share */}
+                    <a
+                      href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
+                        `${window.location.origin}/play/${params.id}/movie`
+                      )}`}
+                      className="bg-blue-600 hover:bg-blue-700 text-white p-2 rounded-full transition-colors duration-200"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label="Share on Facebook"
+                    >
+                      <FacebookIcon className="w-5 h-5" />
+                    </a>
+
+                    {/* Twitter Share */}
+                    <a
+                      href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(
+                        `Watch ${currentMovie?.title || "this movie"}`
+                      )}&url=${encodeURIComponent(
+                        `${window.location.origin}/play/${params.id}/movie`
+                      )}`}
+                      className="bg-blue-400 hover:bg-blue-500 text-white p-2 rounded-full transition-colors duration-200"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label="Share on Twitter"
+                    >
+                      <TwitterIcon className="w-5 h-5" />
+                    </a>
+                  </div>
+
+                 
+
                 </div>
                 <div className="mt-4 md:mt-0 flex space-x-3">
                   <div className="mt-4 md:mt-0 flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-3 w-full sm:w-auto">
@@ -1759,7 +1892,7 @@ const MoviePlayerPage = () => {
                   </div>
                 </div>
 
-                <GoogleAd/>
+                <GoogleAd />
               </div>
             </div>
           </div>

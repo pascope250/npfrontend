@@ -16,25 +16,33 @@ const WixMPDownloadButton: React.FC<WixMPDownloadButtonProps> = ({
 
   const extractVideoUrl = async (manifestUrl: string): Promise<string> => {
     try {
-      // First try to get the highest quality available
+      // Extract the base URL pattern from the manifest URL
+      const urlParts = manifestUrl.split('/');
+      const videoIdIndex = urlParts.findIndex(part => part.startsWith('d7f9fb_'));
+      
+      if (videoIdIndex === -1) {
+        throw new Error('Invalid WixMP URL format');
+      }
+
+      // Reconstruct the base URL
+      const baseUrl = urlParts.slice(0, videoIdIndex + 1).join('/');
+      
+      // Try different quality levels
       const qualities = ['1080p', '720p', '480p', '360p', '240p'];
-      const baseUrl = manifestUrl.split('/manifest.mpd')[0];
       
       for (const quality of qualities) {
-        if (manifestUrl.includes('/file.mp4.urlset/')) {
-          const testUrl = baseUrl.replace('/file.mp4.urlset', `/${quality}/file.mp4`);
-          try {
-            const response = await fetch(testUrl, { method: 'HEAD' });
-            if (response.ok) {
-              return testUrl;
-            }
-          } catch (e) {
-            console.log(`Quality ${quality} not available`);
+        const testUrl = `${baseUrl}/${quality}/file.mp4`;
+        try {
+          const response = await fetch(testUrl, { method: 'HEAD' });
+          if (response.ok) {
+            return testUrl;
           }
+        } catch (e) {
+          console.log(`Quality ${quality} not available`);
         }
       }
       
-      // If no quality-specific URL works, try the standard pattern
+      // Fallback to the most common pattern
       const fallbackUrl = `${baseUrl}/file.mp4`;
       const response = await fetch(fallbackUrl, { method: 'HEAD' });
       if (response.ok) {
@@ -53,7 +61,7 @@ const WixMPDownloadButton: React.FC<WixMPDownloadButtonProps> = ({
     setError(null);
 
     try {
-      // Extract and verify the video URL
+      // First try to get the direct video URL
       const videoUrl = await extractVideoUrl(manifestUrl);
       
       // Trigger download with isWixMP flag
