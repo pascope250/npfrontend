@@ -23,7 +23,6 @@ const Home: NextPage = () => {
             Explore my favorite movies, inspiring quotes, and entertaining YouTube videos.
           </p>
         </div>
-
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
           <MenuCard
             title="Agasobanuye"
