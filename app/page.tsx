@@ -3,8 +3,7 @@ import Head from 'next/head';
 import Navbar from '../components/Navbar';
 import MenuCard from '../components/MenuCard';
 import { FaFilm, FaQuoteLeft, FaYoutube } from 'react-icons/fa';
-// import AdMultiplex from '@/components/ads/AdMultiplex';
-import GoogleAd from '@/components/ads/GoogleAd';
+import AdMultiplex from '@/components/ads/AdMultiplex';
 const Home: NextPage = () => {
   return (
     <div className="min-h-screen">
@@ -23,6 +22,7 @@ const Home: NextPage = () => {
             Explore my favorite movies, inspiring quotes, and entertaining YouTube videos.
           </p>
         </div>
+
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
           <MenuCard
             title="Agasobanuye"
@@ -48,7 +48,7 @@ const Home: NextPage = () => {
             bgColor="bg-gradient-to-br from-red-500 to-pink-500"
           />
         </div>
-        <GoogleAd />
+        <AdMultiplex />
       </main>
 
       
