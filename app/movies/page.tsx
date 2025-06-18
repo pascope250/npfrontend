@@ -14,7 +14,8 @@ import {
   PlayIcon,
 } from "@heroicons/react/24/solid";
 import { FaInfoCircle } from "react-icons/fa";
-import AdInFeed from "@/components/ads/AdInFeed";
+// import AdInFeed from "@/components/ads/AdInFeed";
+import GoogleAd from "@/components/ads/GoogleAd";
 
 const MoviesPage: NextPage = () => {
   const router = useRouter();
@@ -470,7 +471,7 @@ const MoviesPage: NextPage = () => {
 
     {/* ✅ Inject the ad after each genre section */}
     <div className="my-6">
-      <AdInFeed />
+      <GoogleAd />
     </div>
   </React.Fragment>
 ))}

@@ -1,6 +1,5 @@
 // app/play/[id]/page.tsx
 import { redirect } from 'next/navigation';
-import type { Metadata } from 'next';
 import { fetchMovieById } from '@/lib/api';
 
 // This is the correct type

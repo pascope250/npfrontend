@@ -1,5 +1,5 @@
 // lib/api.ts
- const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || 'https://hobby.nepoba.com';
+ const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || 'https://nproject-one.vercel.app';
 export async function fetchMovieById(id: string) {
   try {
     const response = await fetch(`${BACKEND_URL}/api/movies/${id}`);

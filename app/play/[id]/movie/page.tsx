@@ -1105,32 +1105,39 @@ const MoviePlayerPage = () => {
   }
 
   // Add JSON-LD structured data
-  const [structuredData, setStructuredData] = useState<string>("");
-
+  // Add this useEffect for client-side meta tags
   useEffect(() => {
     if (currentMovie) {
-      const jsonLd = {
-        "@context": "https://schema.org",
-        "@type": "Movie",
-        name: currentMovie.title,
-        description: currentMovie.description,
-        image: currentMovie.poster,
-        dateCreated: currentMovie.year ? `${currentMovie.year}` : undefined,
-        aggregateRating: {
-          "@type": "AggregateRating",
-          ratingValue: currentMovie.rating,
-          bestRating: "10",
-          ratingCount: "1000",
-        },
-        genre: currentMovie.categoryName,
-        potentialAction: {
-          "@type": "WatchAction",
-          target: `${window.location.origin}/play/${currentMovie.id}`,
-        },
+      // Update document title
+      document.title = `Agasobanuye - ${currentMovie.title} (${currentMovie.year}) | HobbyVb`;
+      
+      // Helper function to update or create meta tags
+      const updateMetaTag = (property: string, content: string) => {
+        let tag = document.querySelector(`meta[property="${property}"]`);
+        
+        if (!tag) {
+          tag = document.createElement('meta');
+          tag.setAttribute('property', property);
+          document.head.appendChild(tag);
+        }
+        tag.setAttribute('content', content);
       };
-      setStructuredData(JSON.stringify(jsonLd));
+
+      // Update OpenGraph tags
+      updateMetaTag('og:title', `${currentMovie.title} (${currentMovie.year}) | HobbyVb`);
+      updateMetaTag('og:description', currentMovie.description || `Watch ${currentMovie.title} online now.`);
+      updateMetaTag('og:image', currentMovie.poster);
+      updateMetaTag('og:url', window.location.href);
+      updateMetaTag('og:type', 'website');
+
+      // Update Twitter tags
+      updateMetaTag('twitter:card', 'summary_large_image');
+      updateMetaTag('twitter:title', `${currentMovie.title} (${currentMovie.year}) | HobbyVb`);
+      updateMetaTag('twitter:description', currentMovie.description || `Watch ${currentMovie.title} online now.`);
+      updateMetaTag('twitter:image', currentMovie.poster);
     }
   }, [currentMovie]);
+
 
   // Simple SVG icons (or use from your icon library)
   const StarIcon = ({ className }: { className?: string }) => (
@@ -1177,13 +1184,13 @@ const MoviePlayerPage = () => {
         />
       </Head>
 
-      {structuredData && (
+      {/* {structuredData && (
         <Script
           id="movie-structured-data"
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: structuredData }}
         />
-      )}
+      )} */}
       <MovieNavbar />
       <Toaster />
       <div className="container mx-auto px-4 py-6" id="movie-player">
