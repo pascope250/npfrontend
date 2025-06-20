@@ -50,28 +50,32 @@ const MovieNavbar = () => {
   };
 
   return (
-    <nav className="bg-gray-900 text-white p-4 shadow-lg sticky top-0 z-50">
-      <div className="container mx-auto flex justify-between items-center">
-        <Link
-          href="/"
-          className="hidden lg:block text-2xl font-bold text-white hover:text-emerald-400 transition-colors"
-        >
-          HobbyVb
-        </Link>
+    <>
+      {/* Add this style tag to prevent horizontal overflow at the document level */}
+      <style jsx global>{`
+        html, body {
+          max-width: 100%;
+          overflow-x: hidden;
+        }
+      `}</style>
 
-        <Link
-          href="/"
-          className="sm:block lg:hidden text-2xl font-bold text-white hover:text-emerald-400 transition-colors"
-        >
-          MH
-        </Link>
+      <nav className="bg-gray-900 text-white p-4 shadow-lg sticky top-0 z-50 w-screen">
+        <div className="w-full px-2 sm:px-4 flex justify-between items-center relative">
+          {/* Logo Links - unchanged */}
+          <Link href="/" className="hidden lg:block text-2xl font-bold text-white hover:text-emerald-400 transition-colors">
+            HobbyVb
+          </Link>
+          <Link href="/" className="sm:block lg:hidden text-2xl font-bold text-white hover:text-emerald-400 transition-colors">
+            MH
+          </Link>
 
-        <div className="flex-1 max-w-xl mx-4 relative" ref={searchRef}>
-          <div className="relative">
-            <input
-              type="text"
-              placeholder="Search movies..."
-              className="w-full bg-gray-700 border border-gray-600 rounded-full py-2 px-4 text-white focus:outline-none focus:border-emerald-500"
+          {/* Search Bar - modified for better responsiveness */}
+          <div className="flex-1 min-w-0 mx-2 sm:mx-4 relative max-w-2xl" ref={searchRef}>
+            <div className="relative w-full">
+              <input
+                type="text"
+                placeholder="Search movies..."
+                className="w-full bg-gray-700 border border-gray-600 rounded-full py-2 px-4 text-white focus:outline-none focus:border-emerald-500"
               value={searchQuery}
               onChange={(e) => {
                 handleSearch(e.target.value);
@@ -228,6 +232,7 @@ const MovieNavbar = () => {
 
       {/* <NotificationOverlay /> */}
     </nav>
+    </>
   );
 };
 

@@ -35,7 +35,6 @@ export default function DownloadPage() {
       </div>
     );
   }
-
   return (
     <div className="min-h-screen bg-gray-900 text-gray-100">
       <Head>
@@ -63,7 +62,6 @@ export default function DownloadPage() {
                 {currentMovie.title}{" "}
                 {currentMovie.year && `(${currentMovie.year})`}
               </h1>
-
               <div className="flex flex-wrap gap-2 mb-4">
                 <span className="bg-emerald-600 text-white px-2 py-1 rounded text-sm">
                   Rating: {currentMovie.rating}/10
@@ -89,8 +87,8 @@ export default function DownloadPage() {
               {currentMovie.source.map((source: any, index: number) => 
               {
                 // check link type is included dhcplay.com or drive.google.com for with .mp4
-
-                const typee = source.domain.includes("dhcplay.com") ? "HLS" : source.domain.includes("drive.google.com") ? "GOOGLE" : "DIRECT";
+// "DIRECT"
+                const typee = source.domain.includes("dhcplay.com") ? "HLS" : source.domain.includes("drive.google.com") ? "GOOGLE" : source.downloadLink ? 'DOWNLOAD_LINK' : 'DIRECT';
                return (
                 <div key={index}>
                   {part && Number(source.part) === Number(part) && (

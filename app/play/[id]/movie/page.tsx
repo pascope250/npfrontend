@@ -1511,7 +1511,7 @@ const MoviePlayerPage = () => {
                                         {currentMovie?.title}
                                       </span>
                                       <div className="flex items-center text-xs text-gray-400 mt-0.5">
-                                        <span>Part {index + 1}</span>
+                                        <span>Part {source.part}</span>
                                         <span className="mx-1.5">•</span>
                                       </div>
                                     </div>
@@ -1533,7 +1533,7 @@ const MoviePlayerPage = () => {
                                     </svg>
                                     <div>
                                       <span className="font-medium">
-                                        Episode {index + 1}
+                                        Episode {source.part}
                                       </span>
                                     </div>
                                   </>

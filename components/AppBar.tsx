@@ -1,8 +1,8 @@
 // components/AppBar.tsx
 'use client';
 
-import NotificationBell from "@/components/NotificationBell";
-import NotificationOverlay from "@/components/NotificationToggle";
+// import NotificationBell from "@/components/NotificationBell";
+// import NotificationOverlay from "@/components/NotificationToggle";
 import { registerServiceWorker } from '@/lib/sw-register';
 import { useEffect, useState } from "react";
 
@@ -40,11 +40,12 @@ export default function AppBar() {
   }, []);
 
   return (
-    <div className="fixed top-0 right-0 p-4 z-50 flex gap-2">
-      <NotificationOverlay />
-      {/* <NotificationBell /> */}
-      {/* Optional: Show registration status */}
-      <div className="text-xs">{swRegistered ? 'SW ✅' : 'SW ❌'}</div>
-    </div>
+    // <div className="fixed top-0 right-0 p-4 z-50 flex gap-2">
+    //   <NotificationOverlay />
+    //   {/* <NotificationBell /> */}
+    //   {/* Optional: Show registration status */}
+    //   <div className="text-xs">{swRegistered ? 'SW ✅' : 'SW ❌'}</div>
+    // </div>
+    <></>
   );
 }

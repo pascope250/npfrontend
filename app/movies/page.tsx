@@ -138,21 +138,19 @@ const MoviesPage: NextPage = () => {
       </div>
     );
   }
-
   return (
     <div className="min-h-screen bg-gray-900 text-gray-100">
       <Head>
-        <title>My Hobbies | Agasobanuye</title>
+        <title>HobbyVb | Agasobanuye</title>
         <meta name="description" content="My favorite movies and TV shows" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
 
       <MovieNavbar />
-
       {loading ? (
         <MoviesPageSkeleton />
       ) : (
-        <main className="container mx-auto px-2 sm:px-4 py-6 sm:py-12">
+       <main className="container mx-auto px-2 sm:px-4 py-6 sm:py-12">
           <section className="mb-6 px-2 sm:px-0">
             <div className="relative">
               {/* Left fade effect */}

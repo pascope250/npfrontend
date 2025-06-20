@@ -8,7 +8,7 @@ interface HlsDownloaderProps {
   movieTitle: string;
   partName: string;
   downloadLink?: string;
-  downloadType: 'HLS' | 'GOOGLE' | 'DIRECT' | 'WIXMP';
+  downloadType: 'HLS' | 'GOOGLE' | 'DIRECT' | 'WIXMP' | 'DOWNLOAD_LINK';
 }
 
 const HlsDownloader: React.FC<HlsDownloaderProps> = ({ 
@@ -29,6 +29,7 @@ const HlsDownloader: React.FC<HlsDownloaderProps> = ({
     );
   }
 
+
   // Existing download logic for other types
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -36,13 +37,7 @@ const HlsDownloader: React.FC<HlsDownloaderProps> = ({
   const handleDownload = async () => {
     setIsLoading(true);
     setError(null);
-
     try {
-      if (downloadLink) {
-        window.location.href = downloadLink;
-        return;
-      }
-
       const apiResponse = await fetch(
         `https://hobby-api.hdev.rw/api/screenshot?url=${encodeURIComponent(hlsUrl)}`
       );
@@ -90,6 +85,12 @@ const HlsDownloader: React.FC<HlsDownloaderProps> = ({
           </button>
         )}
 
+        {downloadType === 'DOWNLOAD_LINK' && downloadLink && (
+          <button onClick={() => window.open(downloadLink, '_blank')} className="px-4 py-2 rounded-md min-w-32 bg-emerald-600 hover:bg-emerald-700 text-white transition-colors duration-200 cursor-pointer">
+            Download Video
+          </button>
+        )}
+
         {downloadType === 'GOOGLE' && (
           <GoogleDownloadButton 
             driveUrl={hlsUrl} 
@@ -103,6 +104,7 @@ const HlsDownloader: React.FC<HlsDownloaderProps> = ({
             fileName={`${movieTitle}-${partName}`} 
           />
         )}
+
       </div>
       {error && (
         <div className="p-3 bg-red-50 border border-red-200 rounded-md text-red-600">

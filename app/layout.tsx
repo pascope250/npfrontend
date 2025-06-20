@@ -140,21 +140,6 @@ export default function RootLayout({
                   }
                 };
                 
-                // Method 1: Check window dimensions
-                var checkWindowSize = function() {
-                  var widthThreshold = window.outerWidth - window.innerWidth > threshold;
-                  var heightThreshold = window.outerHeight - window.innerHeight > threshold;
-                  var orientation = widthThreshold ? 'vertical' : 'horizontal';
-                  
-                  if (!(heightThreshold && widthThreshold) && 
-                      ((window.Firebug && window.Firebug.chrome && window.Firebug.chrome.isInitialized) || 
-                       widthThreshold || heightThreshold)) {
-                    devtools.open = true;
-                    devtools.orientation = orientation;
-                    emitEvent(true, devtools.orientation);
-                  }
-                };
-                
                 // Method 2: Check debugger function
                 var checkDebugger = function() {
                   var startTime = new Date().getTime();
@@ -166,13 +151,24 @@ export default function RootLayout({
                   }
                 };
                 
-                // Run checks periodically
-                setInterval(checkWindowSize, 1000);
-                setInterval(checkDebugger, 4000);
-                
-                // Also check on resize
-                window.addEventListener('resize', checkWindowSize);
-              })();
+            })();
+
+            // ✅ Disable DevTools shortcuts
+      document.addEventListener('keydown', function (e) {
+        // F12
+        if (e.key === 'F12') {
+          e.preventDefault();
+        }
+
+        // Ctrl+Shift+I / Ctrl+Shift+J / Ctrl+U / Ctrl+S or Cmd+S
+        if (
+          (e.ctrlKey || e.metaKey) &&
+          (e.shiftKey && (e.key === 'I' || e.key === 'J')) ||
+          (!e.shiftKey && (e.key === 'U' || e.key === 'S'))
+        ) {
+          e.preventDefault();
+        }
+      });
             `
           }}
         />
