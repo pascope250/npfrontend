@@ -118,7 +118,7 @@ export default function RootLayout({
       `,
     }}
   />
-        <Script
+        {/* <Script
           id="disable-context-menu"
           dangerouslySetInnerHTML={{
             __html: `
@@ -171,7 +171,7 @@ export default function RootLayout({
       });
             `
           }}
-        />
+        /> */}
       </head>  
 
       <body className={`antialiased`}>
