@@ -196,7 +196,7 @@ export default function GenrePage() {
             >
               <MovieCard
                 movie={movie}
-                onClick={() => router.push(`/play/${movie.id}/movie`)}
+                onClick={() => window.open(`/play/${movie.id}/movie`, "_blank")}
               />
             </div>
           ))}

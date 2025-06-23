@@ -299,24 +299,28 @@ const MoviesPage: NextPage = () => {
                         {movie.description}
                       </p>
                       <div className="flex gap-3 sm:gap-4">
-                        <Link href={`/play/${movie.id}/movie`}>
+                        {/* <Link href={`/play/${movie.id}/movie`}> */}
                           <button
                             className="bg-emerald-600 hover:bg-emerald-500 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-md sm:rounded-lg transition-all duration-300 flex items-center gap-2 shadow-md sm:shadow-lg hover:shadow-emerald-500/20 hover:-translate-y-0.5 sm:hover:-translate-y-1 text-sm sm:text-base"
-                            onClick={handleUserInteraction}
+                            onClick={() => {
+                              handleUserInteraction();
+                              // open new tab with video player
+                              window.open(`/play/${movie.id}/movie`, "_blank");
+                            }}
                           >
                             <PlayIcon className="w-4 h-4 sm:w-5 sm:h-5" />
                             Watch Now
                           </button>
-                        </Link>
-                        <Link href={`/play/${movie.id}/movie`}>
+                        {/* </Link> */}
+                        {/* <Link href={`/play/${movie.id}/movie`}> */}
                           <button
                             className="bg-gray-800/70 hover:bg-gray-700/70 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-md sm:rounded-lg transition-all duration-300 flex items-center gap-2 border border-gray-700 hover:border-gray-600 text-sm sm:text-base"
-                            onClick={handleUserInteraction}
+                            onClick={() => {handleUserInteraction(); window.open(`/play/${movie.id}/movie`, "_blank");}}
                           >
                             <FaInfoCircle className="w-4 h-4 sm:w-5 sm:h-5" />
                             Details
                           </button>
-                        </Link>
+                        {/* </Link> */}
                       </div>
                     </div>
 
@@ -413,8 +417,12 @@ const MoviesPage: NextPage = () => {
           >
             <div className="relative aspect-[2/3] bg-gray-700 overflow-hidden">
               {movie.poster ? (
-                <Link href={`/play/${movie.id}/movie`}>
+                // <Link href={`/play/${movie.id}/movie`}>
                   <Image
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      window.open(`/play/${movie.id}/movie`, "_blank");
+                    }}
                     src={movie.poster}
                     width={200}
                     height={300}
@@ -430,7 +438,7 @@ const MoviesPage: NextPage = () => {
                       (e.currentTarget.src = "/placeholder.png")
                     }
                   />
-                </Link>
+                // </Link>
               ) : (
                 <div className="w-full h-full flex items-center justify-center">
                   <span className="text-gray-400 text-xs sm:text-sm text-center p-1">

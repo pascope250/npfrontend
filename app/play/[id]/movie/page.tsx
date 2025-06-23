@@ -986,7 +986,9 @@ const MoviePlayerPage = () => {
   }, [currentMovie, currentSourceIndex]);
 
   const handleDownload = async (part: number) => {
-    router.push(`/download/${currentMovie?.id}/${part}`);
+    // router.push(`/download/${currentMovie?.id}/${part}`);
+    // open in new tab
+    window.open(`/download/${currentMovie?.id}/${part}`, "_blank");
   };
 
   // Skeleton Loader Component
