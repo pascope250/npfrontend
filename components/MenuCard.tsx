@@ -9,8 +9,13 @@ interface MenuCardProps {
 }
 
 const MenuCard = ({ title, description, href, icon, bgColor }: MenuCardProps) => {
+  // open new tab
+  const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
+    window.open(href, '_blank');
+  };
   return (
-    <Link href={href}>
+    <Link href={href} onClick={handleClick}>
       <div className={`${bgColor} rounded-xl shadow-lg overflow-hidden transform transition-all hover:scale-105 hover:shadow-xl cursor-pointer h-full`}>
         <div className="p-6 flex flex-col items-center text-center">
           <div className="mb-4 text-4xl animate-float">{icon}</div>
