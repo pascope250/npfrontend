@@ -1,7 +1,6 @@
-google.com, pub-2590844740735026, DIRECT, f08c47fec0942fa0
-
 #Ads.txt hobbyvb.com
 #Ads.txt managed by AdsTxtManager.com - the free ads.txt management tool for publishers
+google.com, pub-2590844740735026, DIRECT, f08c47fec0942fa0
 ownerdomain=hobbyvb.com
 contact=directsales@ezoic.com
 managerdomain=ezoic.ai
