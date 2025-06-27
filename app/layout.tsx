@@ -180,10 +180,10 @@ export default function RootLayout({
             <MovieProvider>
               <NotificationProvider>
                 <QuoteProvider>
-                  <GoogleAnalytics/>
+                  {children}
+                   <GoogleAnalytics/>
                   <AppBar />
                   <DisableRightClick/>
-                  {children}
                   <Footer />
                 </QuoteProvider>
               </NotificationProvider>
