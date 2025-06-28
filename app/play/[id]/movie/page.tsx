@@ -1112,34 +1112,45 @@ const MoviePlayerPage = () => {
     if (currentMovie) {
       // Update document title
       document.title = `Agasobanuye - ${currentMovie.title} (${currentMovie.year}) | HobbyVb`;
-      
+
       // Helper function to update or create meta tags
       const updateMetaTag = (property: string, content: string) => {
         let tag = document.querySelector(`meta[property="${property}"]`);
-        
+
         if (!tag) {
-          tag = document.createElement('meta');
-          tag.setAttribute('property', property);
+          tag = document.createElement("meta");
+          tag.setAttribute("property", property);
           document.head.appendChild(tag);
         }
-        tag.setAttribute('content', content);
+        tag.setAttribute("content", content);
       };
 
       // Update OpenGraph tags
-      updateMetaTag('og:title', `${currentMovie.title} (${currentMovie.year}) | HobbyVb`);
-      updateMetaTag('og:description', currentMovie.description || `Watch ${currentMovie.title} online now.`);
-      updateMetaTag('og:image', currentMovie.poster);
-      updateMetaTag('og:url', window.location.href);
-      updateMetaTag('og:type', 'website');
+      updateMetaTag(
+        "og:title",
+        `${currentMovie.title} (${currentMovie.year}) | HobbyVb`
+      );
+      updateMetaTag(
+        "og:description",
+        currentMovie.description || `Watch ${currentMovie.title} online now.`
+      );
+      updateMetaTag("og:image", currentMovie.poster);
+      updateMetaTag("og:url", window.location.href);
+      updateMetaTag("og:type", "website");
 
       // Update Twitter tags
-      updateMetaTag('twitter:card', 'summary_large_image');
-      updateMetaTag('twitter:title', `${currentMovie.title} (${currentMovie.year}) | HobbyVb`);
-      updateMetaTag('twitter:description', currentMovie.description || `Watch ${currentMovie.title} online now.`);
-      updateMetaTag('twitter:image', currentMovie.poster);
+      updateMetaTag("twitter:card", "summary_large_image");
+      updateMetaTag(
+        "twitter:title",
+        `${currentMovie.title} (${currentMovie.year}) | HobbyVb`
+      );
+      updateMetaTag(
+        "twitter:description",
+        currentMovie.description || `Watch ${currentMovie.title} online now.`
+      );
+      updateMetaTag("twitter:image", currentMovie.poster);
     }
   }, [currentMovie]);
-
 
   // Simple SVG icons (or use from your icon library)
   const StarIcon = ({ className }: { className?: string }) => (
@@ -1168,10 +1179,9 @@ const MoviePlayerPage = () => {
 
   return loading ? (
     <>
-    <MovieNavbar />
-    <MoviePlayerSkeleton />
+      <MovieNavbar />
+      <MoviePlayerSkeleton />
     </>
-    
   ) : (
     <div className="min-h-screen bg-gray-900 text-gray-100">
       <Head>
@@ -1260,6 +1270,11 @@ const MoviePlayerPage = () => {
                         currentMovie?.source[currentSourceIndex].baseUrl
                       }
                       isLoading={isLoading}
+                      adTagUrl={`https://pubads.g.doubleclick.net/gampad/live/ads?iu=/23308224455/Video//Preroll_Main&description_url=https%3A%2F%2Fhobbyvb.com%2Fmovies&tfcd=1&npa=0&sz=640x480&ciu_szs=300x600%2C728x90%2C300x250&cmsid=${
+                        currentMovie?.id || "default"
+                      }&vid=${
+                        currentMovie?.id || "default"
+                      }&gdfp_req=1&unviewed_position_start=1&output=vast&env=vp&impl=s&correlator=`}
                     />
                   ) : currentMovie?.source[currentSourceIndex].isIframe ? (
                     <Iframe
@@ -1279,7 +1294,14 @@ const MoviePlayerPage = () => {
                         currentMovie?.source[currentSourceIndex].baseUrl
                       }
                     />
-                  ) : null}
+                  ) : (
+                    <div className="flex flex-col items-center justify-center h-full">
+                      <span className="text-gray-400 text-lg font-semibold tracking-wide drop-shadow-lg">
+                        {currentMovie?.source[currentSourceIndex].domain} is
+                        not supported.
+                      </span>
+                    </div>
+                  )}
                 </>
               )}
             </div>
@@ -1313,13 +1335,15 @@ const MoviePlayerPage = () => {
                         {currentMovie.categoryName}
                       </span>
                     )}
-                     {/* Social Sharing Buttons */}
-                      <span className="text-gray-400 text-sm mr-1">Share:</span>
+                    {/* Social Sharing Buttons */}
+                    <span className="text-gray-400 text-sm mr-1">Share:</span>
 
-                     <a
+                    <a
                       href={`whatsapp://send?text=Watch ${encodeURIComponent(
                         currentMovie?.title || "this movie"
-                      )} on ${window.location.origin}/play/${currentMovie?.id}/movie`}
+                      )} on ${window.location.origin}/play/${
+                        currentMovie?.id
+                      }/movie`}
                       className="bg-green-600 hover:bg-green-700 text-white p-2 rounded-full transition-colors duration-200"
                       target="_blank"
                       rel="noopener noreferrer"
@@ -1356,9 +1380,6 @@ const MoviePlayerPage = () => {
                       <TwitterIcon className="w-5 h-5" />
                     </a>
                   </div>
-
-                 
-
                 </div>
                 <div className="mt-4 md:mt-0 flex space-x-3">
                   <div className="mt-4 md:mt-0 flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-3 w-full sm:w-auto">
