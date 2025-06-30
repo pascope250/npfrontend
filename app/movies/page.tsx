@@ -1,7 +1,7 @@
 "use client";
 import type { NextPage } from "next";
 import Head from "next/head";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect,useRef } from "react";
 import { Genre, Movie, useMovieContext } from "@/context/movieContext";
 import Image from "next/image";
 import Link from "next/link";
@@ -138,6 +138,40 @@ const MoviesPage: NextPage = () => {
       </div>
     );
   }
+
+  const recentMovies = [...movies]
+    .sort(
+      (a, b) =>
+        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+    )
+    .slice(0, 14); // Show 10 most recent
+
+    // ...existing imports...
+
+const carouselRef = useRef<HTMLDivElement>(null);
+const [carouselIndex, setCarouselIndex] = useState(0);
+
+useEffect(() => {
+  if (!recentMovies.length) return;
+  const interval = setInterval(() => {
+    setCarouselIndex((prev) => (prev + 1) % recentMovies.length);
+  }, 2500); // Change slide every 2.5 seconds
+
+  return () => clearInterval(interval);
+}, [recentMovies.length]);
+
+useEffect(() => {
+  if (carouselRef.current) {
+    const cardWidth = carouselRef.current.firstChild
+      ? (carouselRef.current.firstChild as HTMLElement).clientWidth + 16 // 16px for space-x-4
+      : 0;
+    carouselRef.current.scrollTo({
+      left: carouselIndex * cardWidth,
+      behavior: "smooth",
+    });
+  }
+}, [carouselIndex]);
+
   return (
     <div className="min-h-screen bg-gray-900 text-gray-100">
       <Head>
@@ -150,7 +184,7 @@ const MoviesPage: NextPage = () => {
       {loading ? (
         <MoviesPageSkeleton />
       ) : (
-       <main className="container mx-auto px-2 sm:px-4 py-6 sm:py-12">
+        <main className="container mx-auto px-2 sm:px-4 py-6 sm:py-12">
           <section className="mb-6 px-2 sm:px-0">
             <div className="relative">
               {/* Left fade effect */}
@@ -300,26 +334,29 @@ const MoviesPage: NextPage = () => {
                       </p>
                       <div className="flex gap-3 sm:gap-4">
                         {/* <Link href={`/play/${movie.id}/movie`}> */}
-                          <button
-                            className="bg-emerald-600 hover:bg-emerald-500 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-md sm:rounded-lg transition-all duration-300 flex items-center gap-2 shadow-md sm:shadow-lg hover:shadow-emerald-500/20 hover:-translate-y-0.5 sm:hover:-translate-y-1 text-sm sm:text-base"
-                            onClick={() => {
-                              handleUserInteraction();
-                              // open new tab with video player
-                              window.open(`/play/${movie.id}/movie`, "_blank");
-                            }}
-                          >
-                            <PlayIcon className="w-4 h-4 sm:w-5 sm:h-5" />
-                            Watch Now
-                          </button>
+                        <button
+                          className="bg-emerald-600 hover:bg-emerald-500 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-md sm:rounded-lg transition-all duration-300 flex items-center gap-2 shadow-md sm:shadow-lg hover:shadow-emerald-500/20 hover:-translate-y-0.5 sm:hover:-translate-y-1 text-sm sm:text-base"
+                          onClick={() => {
+                            handleUserInteraction();
+                            // open new tab with video player
+                            window.open(`/play/${movie.id}/movie`, "_blank");
+                          }}
+                        >
+                          <PlayIcon className="w-4 h-4 sm:w-5 sm:h-5" />
+                          Watch Now
+                        </button>
                         {/* </Link> */}
                         {/* <Link href={`/play/${movie.id}/movie`}> */}
-                          <button
-                            className="bg-gray-800/70 hover:bg-gray-700/70 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-md sm:rounded-lg transition-all duration-300 flex items-center gap-2 border border-gray-700 hover:border-gray-600 text-sm sm:text-base"
-                            onClick={() => {handleUserInteraction(); window.open(`/play/${movie.id}/movie`, "_blank");}}
-                          >
-                            <FaInfoCircle className="w-4 h-4 sm:w-5 sm:h-5" />
-                            Details
-                          </button>
+                        <button
+                          className="bg-gray-800/70 hover:bg-gray-700/70 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-md sm:rounded-lg transition-all duration-300 flex items-center gap-2 border border-gray-700 hover:border-gray-600 text-sm sm:text-base"
+                          onClick={() => {
+                            handleUserInteraction();
+                            window.open(`/play/${movie.id}/movie`, "_blank");
+                          }}
+                        >
+                          <FaInfoCircle className="w-4 h-4 sm:w-5 sm:h-5" />
+                          Details
+                        </button>
                         {/* </Link> */}
                       </div>
                     </div>
@@ -402,86 +439,140 @@ const MoviesPage: NextPage = () => {
               </div>
             </div>
           </section>
-          {/* Genre Sections */}
-          {filteredCategories.map((genre, index) => (
-  <React.Fragment key={genre.categoryName}>
-    <section className="mb-10 sm:mb-16 px-2 sm:px-0">
-      <h2 className="text-xl sm:text-2xl font-bold text-white mb-4 sm:mb-6">
-        {genre.categoryName}
-      </h2>
-      <div className="grid grid-cols-2 sm:grid-cols-5 gap-3 sm:gap-4">
-        {genre.movies.slice(0, isMobile ? 6 : 5).map((movie) => (
-          <div
-            key={movie.id}
-            className="bg-gray-800 rounded-lg overflow-hidden hover:bg-gray-700 transition-colors h-full flex flex-col"
-          >
-            <div className="relative aspect-[2/3] bg-gray-700 overflow-hidden">
-              {movie.poster ? (
-                // <Link href={`/play/${movie.id}/movie`}>
-                  <Image
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      window.open(`/play/${movie.id}/movie`, "_blank");
-                    }}
-                    src={movie.poster}
-                    width={200}
-                    height={300}
-                    alt={movie.title}
-                    className="w-full h-full object-cover"
-                    loading="lazy"
-                    placeholder="blur"
-                    blurDataURL={movie.poster}
-                    sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, (max-width: 1280px) 25vw, (min-width: 1281px) 20vw"
-                    quality={80}
-                    unoptimized
-                    onError={(e) =>
-                      (e.currentTarget.src = "/placeholder.png")
-                    }
-                  />
-                // </Link>
-              ) : (
-                <div className="w-full h-full flex items-center justify-center">
-                  <span className="text-gray-400 text-xs sm:text-sm text-center p-1">
-                    No poster available
-                  </span>
-                </div>
-              )}
-            </div>
-            <div className="p-2 sm:p-3 flex-grow">
-              <h3 className="font-bold text-sm sm:text-base truncate">
-                {movie.title}
-              </h3>
-              <div className="flex justify-between items-center mt-1">
-                <p className="text-gray-400 text-xs sm:text-sm">{movie.year}</p>
-                <div className="flex items-center">
-                  <span className="text-xs text-gray-300">
-                    ⭐ {movie.rating}/10
-                  </span>
-                </div>
-              </div>
+
+          {/* Recent Movies Carousel */}
+          <section className="mb-10 sm:mb-16 px-2 sm:px-0">
+  <h2 className="text-xl sm:text-2xl font-bold text-white mb-4 sm:mb-6">
+    Recent Movies
+  </h2>
+  <div className="relative">
+    <div
+      ref={carouselRef}
+      className="flex overflow-x-auto space-x-4 scrollbar-none pb-2"
+      style={{ scrollBehavior: "smooth" }}
+    >
+      {recentMovies.map((movie) => (
+        <div
+          key={movie.id}
+          className="min-w-[160px] max-w-[180px] bg-gray-800 rounded-lg overflow-hidden hover:bg-gray-700 transition-colors flex-shrink-0"
+        >
+          <div className="relative aspect-[2/3] bg-gray-700 overflow-hidden">
+            <Image
+              src={movie.poster}
+              width={160}
+              height={240}
+              alt={movie.title}
+              className="w-full h-full object-cover"
+              loading="lazy"
+              placeholder="blur"
+              blurDataURL={movie.poster}
+              quality={70}
+              unoptimized
+              onError={(e) =>
+                (e.currentTarget.src = "/placeholder.png")
+              }
+              onClick={() => window.open(`/play/${movie.id}/movie`, "_blank")}
+              style={{ cursor: "pointer" }}
+            />
+          </div>
+          <div className="p-2">
+            <h3 className="font-bold text-xs truncate">{movie.title}</h3>
+            <div className="flex justify-between items-center mt-1">
+              <span className="text-gray-400 text-xs">{movie.year}</span>
+              <span className="text-xs text-gray-300">⭐ {movie.rating}</span>
             </div>
           </div>
-        ))}
-
-        {isMobile && genre.movies.length > 6 && (
-          <Link href={`/genre/${genre.movies[0].categoryId}`} passHref>
-            <div className="bg-gray-800 rounded-lg flex items-center justify-center aspect-[2/3] cursor-pointer hover:bg-gray-700 transition-colors">
-              <button className="text-emerald-400 text-sm font-medium">
-                +{genre.movies.length - 6} More
-              </button>
-            </div>
-          </Link>
-        )}
-      </div>
-    </section>
-
-    {/* ✅ Inject the ad after each genre section */}
-    <div className="my-6">
-      <GoogleAd />
+        </div>
+      ))}
     </div>
-  </React.Fragment>
-))}
+  </div>
+</section>
 
+          <GoogleAd />
+          {/* Genre Sections */}
+          {filteredCategories.map((genre, index) => (
+            <React.Fragment key={genre.categoryName}>
+              <section className="mb-10 sm:mb-16 px-2 sm:px-0">
+                <h2 className="text-xl sm:text-2xl font-bold text-white mb-4 sm:mb-6">
+                  {genre.categoryName}
+                </h2>
+                <div className="grid grid-cols-2 sm:grid-cols-5 gap-3 sm:gap-4">
+                  {genre.movies.slice(0, isMobile ? 6 : 5).map((movie) => (
+                    <div
+                      key={movie.id}
+                      className="bg-gray-800 rounded-lg overflow-hidden hover:bg-gray-700 transition-colors h-full flex flex-col"
+                    >
+                      <div className="relative aspect-[2/3] bg-gray-700 overflow-hidden">
+                        {movie.poster ? (
+                          // <Link href={`/play/${movie.id}/movie`}>
+                          <Image
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              window.open(`/play/${movie.id}/movie`, "_blank");
+                            }}
+                            src={movie.poster}
+                            width={200}
+                            height={300}
+                            alt={movie.title}
+                            className="w-full h-full object-cover"
+                            loading="lazy"
+                            placeholder="blur"
+                            blurDataURL={movie.poster}
+                            sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, (max-width: 1280px) 25vw, (min-width: 1281px) 20vw"
+                            quality={80}
+                            unoptimized
+                            onError={(e) =>
+                              (e.currentTarget.src = "/placeholder.png")
+                            }
+                          />
+                        ) : (
+                          // </Link>
+                          <div className="w-full h-full flex items-center justify-center">
+                            <span className="text-gray-400 text-xs sm:text-sm text-center p-1">
+                              No poster available
+                            </span>
+                          </div>
+                        )}
+                      </div>
+                      <div className="p-2 sm:p-3 flex-grow">
+                        <h3 className="font-bold text-sm sm:text-base truncate">
+                          {movie.title}
+                        </h3>
+                        <div className="flex justify-between items-center mt-1">
+                          <p className="text-gray-400 text-xs sm:text-sm">
+                            {movie.year}
+                          </p>
+                          <div className="flex items-center">
+                            <span className="text-xs text-gray-300">
+                              ⭐ {movie.rating}/10
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+
+                  {isMobile && genre.movies.length > 6 && (
+                    <Link
+                      href={`/genre/${genre.movies[0].categoryId}`}
+                      passHref
+                    >
+                      <div className="bg-gray-800 rounded-lg flex items-center justify-center aspect-[2/3] cursor-pointer hover:bg-gray-700 transition-colors">
+                        <button className="text-emerald-400 text-sm font-medium">
+                          +{genre.movies.length - 6} More
+                        </button>
+                      </div>
+                    </Link>
+                  )}
+                </div>
+              </section>
+
+              {/* ✅ Inject the ad after each genre section */}
+              <div className="my-6">
+                <GoogleAd />
+              </div>
+            </React.Fragment>
+          ))}
         </main>
       )}
     </div>
