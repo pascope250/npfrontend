@@ -118,60 +118,61 @@ export default function RootLayout({
           }}
         />
 
-        <Script
-          id="disable-context-menu"
-          dangerouslySetInnerHTML={{
-            __html: `
-              // Right-click prevention
-              document.addEventListener('contextmenu', function(e) {
-                e.preventDefault();
-              });
-              
-              // DevTools detection
-              (function() {
-                var devtools = {
-                  open: false,
-                  orientation: null
-                };
-                var threshold = 160;
-                var emitEvent = function(state, orientation) {
-                  if (state) {
-                    window.location.href = "about:blank"; // Close the tab
-                  }
-                };
-                
-                // Method 2: Check debugger function
-                var checkDebugger = function() {
-                  var startTime = new Date().getTime();
-                  debugger;
-                  var endTime = new Date().getTime();
-                  if (endTime - startTime > 100) {
-                    devtools.open = true;
-                    emitEvent(true, null);
-                  }
-                };
-                
-            })();
-
-            // ✅ Disable DevTools shortcuts
-      document.addEventListener('keydown', function (e) {
-        // F12
-        if (e.key === 'F12') {
-          e.preventDefault();
+        <script
+  id="disable-devtools"
+  dangerouslySetInnerHTML={{
+    __html: `
+      // 🔴 Redirect to blank page if DevTools is opened
+      (function() {
+        var devtoolsOpen = false;
+        
+        function checkDevTools() {
+          var startTime = new Date().getTime();
+          (function() {
+            debugger;
+          })();
+          var endTime = new Date().getTime();
+          
+          // If DevTools is open, the debugger slows execution
+          if (endTime - startTime > 100) {
+            devtoolsOpen = true;
+            window.location.href = "about:blank"; // Redirect to blank
+          }
         }
+        
+        // Check every second
+        setInterval(checkDevTools, 1000);
+      })();
 
-        // Ctrl+Shift+I / Ctrl+Shift+J / Ctrl+U / Ctrl+S or Cmd+S
-        if (
-          (e.ctrlKey || e.metaKey) &&
-          (e.shiftKey && (e.key === 'I' || e.key === 'J')) ||
-          (!e.shiftKey && (e.key === 'U' || e.key === 'S'))
-        ) {
+      // 🔴 Block Ctrl+S / Cmd+S (Save Page)
+      document.addEventListener('keydown', function(e) {
+        if ((e.ctrlKey || e.metaKey) && (e.key === 's' || e.keyCode === 83)) {
           e.preventDefault();
         }
       });
-            `,
-          }}
-        />
+
+      // 🔴 Block DevTools Shortcuts (F12, Ctrl+Shift+I, etc.)
+      document.addEventListener('keydown', function(e) {
+        // F12
+        if (e.key === 'F12' || e.keyCode === 123) {
+          e.preventDefault();
+          window.location.href = "about:blank";
+        }
+        
+        // Ctrl+Shift+I / Ctrl+Shift+J / Ctrl+Shift+C
+        if (
+          (e.ctrlKey || e.metaKey) && 
+          e.shiftKey && 
+          (e.key === 'I' || e.key === 'J' || e.key === 'C' || 
+           e.keyCode === 73 || e.keyCode === 74 || e.keyCode === 67)
+        ) {
+          e.preventDefault();
+          window.location.href = "about:blank";
+        }
+      });
+    `,
+  }}
+/>
       </head>
 
       <body className={`antialiased`}>
