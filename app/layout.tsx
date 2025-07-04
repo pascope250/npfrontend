@@ -71,19 +71,18 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-
   return (
     <html lang="en">
       <head>
         <Script
-        strategy="afterInteractive"
-        src="https://www.googletagmanager.com/gtag/js?id=G-1YG5H4WCFY"
-      />
-      <Script
-        id="ga4-script"
-        strategy="afterInteractive"
-        dangerouslySetInnerHTML={{
-          __html: `
+          strategy="afterInteractive"
+          src="https://www.googletagmanager.com/gtag/js?id=G-1YG5H4WCFY"
+        />
+        <Script
+          id="ga4-script"
+          strategy="afterInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
             gtag('js', new Date());
@@ -91,33 +90,34 @@ export default function RootLayout({
               page_path: window.location.pathname,
             });
           `,
-        }}
-      />
+          }}
+        />
         <Script
           id="website-schema"
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
-        
+
         {/* ✅ Google AdSense Script */}
-   <Script
-    id="adsbygoogle-js"
-    src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2590844740735026"
-    strategy="afterInteractive"
-    crossOrigin="anonymous"
-  />
-  <Script
-    id="adsbygoogle-init"
-    strategy="afterInteractive"
-    dangerouslySetInnerHTML={{
-      __html: `
-        (adsbygoogle = window.adsbygoogle || []).push({
-          google_ad_client: "ca-pub-2590844740735026",
-          enable_page_level_ads: true
-        });
-      `,
-    }}
-  />
+        <Script
+          id="adsbygoogle-js"
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2590844740735026"
+          strategy="afterInteractive"
+          crossOrigin="anonymous"
+        />
+        <Script
+          id="adsbygoogle-init"
+          strategy="afterInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `
+      (adsbygoogle = window.adsbygoogle || []).push({
+        google_ad_client: "ca-pub-2590844740735026",
+        enable_page_level_ads: true
+      });
+    `,
+          }}
+        />
+
         <Script
           id="disable-context-menu"
           dangerouslySetInnerHTML={{
@@ -169,10 +169,10 @@ export default function RootLayout({
           e.preventDefault();
         }
       });
-            `
+            `,
           }}
         />
-      </head>  
+      </head>
 
       <body className={`antialiased`}>
         <ContactProvider>
@@ -181,16 +181,15 @@ export default function RootLayout({
               <NotificationProvider>
                 <QuoteProvider>
                   {children}
-                   <GoogleAnalytics/>
+                  <GoogleAnalytics />
                   <AppBar />
-                  <DisableRightClick/>
+                  <DisableRightClick />
                   <Footer />
                 </QuoteProvider>
               </NotificationProvider>
             </MovieProvider>
           </VideoProvider>
         </ContactProvider>
-        
       </body>
     </html>
   );
