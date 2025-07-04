@@ -56,6 +56,7 @@ interface MovieContextType {
   genre:Genre[];
   comment: Comment[];
   loading: boolean;
+  isCommentLoading: boolean;
   error: string | null;
 }
 
@@ -67,7 +68,7 @@ export const MovieProvider = ({ children }: { children: ReactNode }) => {
   const [comment, setComment] = useState<Comment[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const [search, setSearch] = useState<string>('');
+  const [isCommentLoading, setIsCommentLoading] = useState<boolean>(false);
  const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || 'https://hobby.nepoba.com';
 
 
@@ -142,7 +143,7 @@ const socket: Socket = io(BACKEND_URL, {
   // for comments
    const fetchComments = async () => {
     try{
-      setLoading(true);
+      setIsCommentLoading(true);
       // const res = await fetch('https://hobby.nepoba.com/api/comments/list');
       const res = await fetch(`${BACKEND_URL}/api/comments/list`);
       if (!res.ok) throw new Error('Failed to fetch comments');
@@ -150,6 +151,8 @@ const socket: Socket = io(BACKEND_URL, {
       setComment(data);
     }catch(err:any){
       setError(err.message || 'Unknown error');
+    }finally{
+      setIsCommentLoading(false);
     }
     }
   useEffect(() => {
@@ -158,7 +161,7 @@ const socket: Socket = io(BACKEND_URL, {
 
   const addComment = async (data: Partial<Comment>) => {
   try {
-    setLoading(true);
+    setIsCommentLoading(true);
     setError(null);
     const res = await fetch(
       // 'https://hobby.nepoba.com/api/comments/create',
@@ -179,7 +182,7 @@ const socket: Socket = io(BACKEND_URL, {
   } catch (err: any) {
     setError(err.message || 'Unknown error');
   } finally {
-    setLoading(false);
+    setIsCommentLoading(false);
   }
 };
 
@@ -188,7 +191,7 @@ const socket: Socket = io(BACKEND_URL, {
 const addReply = async (data: Partial<Reply>) => {
   
   try {
-    setLoading(true);
+    setIsCommentLoading(true);
     setError(null);
     const res = await fetch(
       `${BACKEND_URL}/api/comments/${data.commentId}/replies`, // Change this to your actual API endpoint
@@ -210,14 +213,14 @@ const addReply = async (data: Partial<Reply>) => {
   } catch (err: any) {
     setError(err.message || 'Unknown error');
   } finally {
-    setLoading(false);
+    setIsCommentLoading(false);
   }
 };
 
 // add like to a comment
 const addCommentLike = async (commentId: string) => {
   try {
-    setLoading(true);
+    setIsCommentLoading(true);
     setError(null);
     const res = await fetch(
       `${BACKEND_URL}/api/comments/${commentId}/like`, // Change this to your actual API endpoint
@@ -237,13 +240,13 @@ const addCommentLike = async (commentId: string) => {
   } catch (err: any) {
     setError(err.message || 'Unknown error');
   } finally {
-    setLoading(false);
+    setIsCommentLoading(false);
   }
 };
 // add like to a reply
 const addReplyLike = async (commentId:string, replyId: string) => {
   try {
-    setLoading(true);
+    setIsCommentLoading(true);
     setError(null);
     const res = await fetch(
       `${BACKEND_URL}/api/comments/${commentId}/replies/${replyId}/like`, // Change this to your actual API endpoint
@@ -263,12 +266,12 @@ const addReplyLike = async (commentId:string, replyId: string) => {
     setLoading(false);  
   }
   finally {
-    setLoading(false);
+    setIsCommentLoading(false);
   }
 };
 
   return (
-    <MovieContext.Provider value={{ movies,genre,comment, addComment,addReply, addCommentLike, addReplyLike, fetchComments,socket, loading, error }}>
+    <MovieContext.Provider value={{ movies,genre,comment, addComment,addReply, addCommentLike, isCommentLoading, addReplyLike, fetchComments,socket, loading, error }}>
       {children}
     </MovieContext.Provider>
   );

@@ -23,6 +23,7 @@ const MoviePlayerPage = () => {
     addComment,
     fetchComments,
     addCommentLike,
+    isCommentLoading,
     addReplyLike,
   } = useMovieContext();
   const router = useRouter();
@@ -34,11 +35,9 @@ const MoviePlayerPage = () => {
   const [userName, setUserName] = useState("");
   const [newComment, setNewComment] = useState("");
   const [comments, setComments] = useState<Comment[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
   const [videoUrl, setVideoUrl] = useState("");
   const [visibleComments, setVisibleComments] = useState(5);
   const [replyingTo, setReplyingTo] = useState<number | null>(null);
-  const [isCommentLoading, setIsCommentLoading] = useState(false);
   const [replyText, setReplyText] = useState("");
   const param = useParams();
   const id = param?.id;
@@ -116,25 +115,19 @@ const MoviePlayerPage = () => {
 
   const handleLike = async (commentId: string) => {
     try {
-      setIsCommentLoading(true);
       await addCommentLike(commentId);
       await fetchComments();
     } catch (error) {
       console.error("Error liking comment:", error);
-    } finally {
-      setIsCommentLoading(false);
-    }
   };
+}
 
   const handleReplyLike = async (commentId: string, replyId: string) => {
     try {
-      setIsCommentLoading(true);
       await addReplyLike(commentId, replyId);
       await fetchComments();
     } catch (error) {
       console.error("Error liking reply:", error);
-    } finally {
-      setIsCommentLoading(false);
     }
   };
 
@@ -171,7 +164,6 @@ const MoviePlayerPage = () => {
     }
 
     try {
-      setIsCommentLoading(true);
       await addReply({
         commentId: commentId,
         userName: trimmedUserName,
@@ -185,8 +177,6 @@ const MoviePlayerPage = () => {
     } catch (error) {
       console.error("Error adding reply:", error);
       toast.error("Failed to post reply");
-    } finally {
-      setIsCommentLoading(false);
     }
   };
 
@@ -226,7 +216,6 @@ const MoviePlayerPage = () => {
     }
 
     try {
-      setIsCommentLoading(true);
       await addComment({
         movieId: currentMovie?.id,
         userName: trimmedUserName,
@@ -237,9 +226,7 @@ const MoviePlayerPage = () => {
     } catch (error) {
       console.error("Error adding comment:", error);
       toast.error("Failed to add comment");
-    } finally {
-      setIsCommentLoading(false);
-    }
+    } 
   };
 
   useEffect(() => {
@@ -248,7 +235,6 @@ const MoviePlayerPage = () => {
 
       const externalVideoUrl = `${currentMovie.source[currentSourceIndex].domain}${currentMovie.source[currentSourceIndex].baseUrl}`;
       try {
-        setIsCommentLoading(true);
         if (
           currentMovie.source[currentSourceIndex].domain.includes("google.com")
         ) {
@@ -282,8 +268,6 @@ const MoviePlayerPage = () => {
         }
       } catch (err) {
         console.error("Full error:", err);
-      } finally {
-        setIsCommentLoading(false);
       }
     };
 
@@ -937,7 +921,7 @@ const MoviePlayerPage = () => {
                           disabled={
                             !newComment.trim() || !userName.trim() || isCommentLoading
                           }
-                          className={`px-5 py-2 rounded-lg font-semibold transition-colors duration-150 shadow ${
+                          className={`px-5 py-2 rounded-lg font-semibold transition-colors duration-150 shadow cursor-pointer disabled:cursor-not-allowed ${
                             newComment.trim() && userName.trim()
                               ? "bg-emerald-600 hover:bg-emerald-700 text-white"
                               : "bg-gray-700 text-gray-400 cursor-not-allowed"
