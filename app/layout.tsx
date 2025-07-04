@@ -105,7 +105,7 @@ export default function RootLayout({
           strategy="afterInteractive"
           crossOrigin="anonymous"
         />
-        <Script
+        {/* <Script
           id="adsbygoogle-init"
           strategy="afterInteractive"
           dangerouslySetInnerHTML={{
@@ -116,7 +116,7 @@ export default function RootLayout({
       });
     `,
           }}
-        />
+        /> */}
 
         <Script
           id="disable-context-menu"
