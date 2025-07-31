@@ -86,10 +86,21 @@ const HlsDownloader: React.FC<HlsDownloaderProps> = ({
         )}
 
         {downloadType === 'DOWNLOAD_LINK' && downloadLink && (
-          <button onClick={() => window.open(downloadLink, '_blank')} className="px-4 py-2 rounded-md min-w-32 bg-emerald-600 hover:bg-emerald-700 text-white transition-colors duration-200 cursor-pointer">
-            Download Video
-          </button>
-        )}
+  <button 
+    onClick={() => {
+      if (downloadLink.includes('agasobanuyenow.com')) {
+        // Use our proxy for agasobanuyenow links
+        window.open(`/api/download-with-referer?url=${encodeURIComponent(downloadLink)}`, '_blank');
+      } else {
+        // Regular download for other links
+        window.open(downloadLink, '_blank');
+      }
+    }}
+    className="px-4 py-2 rounded-md min-w-32 bg-emerald-600 hover:bg-emerald-700 text-white transition-colors duration-200 cursor-pointer"
+  >
+    Download Video
+  </button>
+)}
 
         {downloadType === 'GOOGLE' && (
           <GoogleDownloadButton 

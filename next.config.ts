@@ -32,6 +32,10 @@ const nextConfig: NextConfig = {
         // for local host
         protocol: 'http',
         hostname: 'localhost',
+      },
+      {
+        protocol: 'https',
+        hostname: 'res.cloudinary.com',
       }
     ],
     minimumCacheTTL: 60,

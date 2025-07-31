@@ -12,6 +12,7 @@ export interface Comment {
   createdAt: string;
   replies: Reply[]; // Nested replies
 }
+type type = "TRANSLATED" | "ORIGINAL";
 export interface Reply {
   id: string;
   commentId: string;
@@ -31,6 +32,7 @@ export interface MovieSource {
 export interface Movie {
   id: string;
   categoryId: string;
+  type: type;
   categoryName: string;
   title: string;
   year: number;
@@ -47,38 +49,49 @@ export interface Genre {
 
 interface MovieContextType {
   movies: Movie[];
+  originals: Movie[];
+  searchMovies: (query: string) => Promise<Movie[] | undefined>;
   fetchComments: () => Promise<void>;
   addComment: (data: Partial<Comment>) => Promise<void>;
   addReply: (data: Partial<Reply>) => Promise<void>;
   addCommentLike: (commentId: string) => Promise<void>;
   addReplyLike: (commentId:string, replyId: string) => Promise<void>;
-  socket: Socket;
+  // socket: Socket;
   genre:Genre[];
   comment: Comment[];
   loading: boolean;
   isCommentLoading: boolean;
   error: string | null;
+  searchingLoader: boolean;
 }
 
 const MovieContext = createContext<MovieContextType | undefined>(undefined);
 
 export const MovieProvider = ({ children }: { children: ReactNode }) => {
   const [movies, setMovies] = useState<Movie[]>([]);
+  const [originals, setOriginals] = useState<Movie[]>([]);
   const [genre, setGenre] = useState<Genre[]>([]);
   const [comment, setComment] = useState<Comment[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [searchingLoader, setSearchingLoader] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [isCommentLoading, setIsCommentLoading] = useState<boolean>(false);
  const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || 'https://hobby.nepoba.com';
 
-
-const socket: Socket = io(BACKEND_URL, {
-  withCredentials: true,
-   path: '/api/socketio',
-   transports: ['websocket', 'polling'],
-  // autoConnect: false
-  // transports: ['websocket', 'polling'] // Try both transports
-});
+ // searchMovies
+  const searchMovies = async (query: string) => {
+    try {
+      setSearchingLoader(true);
+      const res = await fetch(`${BACKEND_URL}/api/movies/search?query=${query}`);
+      if (!res.ok) throw new Error('Failed to fetch movies');
+      const data: Movie[] = await res.json();
+      return data;
+    } catch (err: any) {
+      setError(err.message || 'Unknown error');
+    }finally {
+      setSearchingLoader(false);
+    }
+  }
 
   useEffect(() => {
     const fetchMovies = async () => {
@@ -103,14 +116,14 @@ const socket: Socket = io(BACKEND_URL, {
     // Change your socket connection to match your backend URL
  // or your production socket URL
 
-  socket.on('moviesUpdated', async() => {
+//   socket.on('moviesUpdated', async() => {
 
-    const res = await fetch(`${BACKEND_URL}/api/movies/list`);
-    // const res = await fetch('https://hobby.nepoba.com/api/movies/list');
-    if (!res.ok) throw new Error('Failed to fetch movies');
-    const data: Movie[] = await res.json();
-    setMovies(data);
-});
+//     const res = await fetch(`${BACKEND_URL}/api/movies/list`);
+//     // const res = await fetch('https://hobby.nepoba.com/api/movies/list');
+//     if (!res.ok) throw new Error('Failed to fetch movies');
+//     const data: Movie[] = await res.json();
+//     setMovies(data);
+// });
 
     // Optionally, listen for single movie add/update/delete events
     // socket.on('movieAdded', (movie: Movie) => setMovies(prev => [...prev, movie]));
@@ -118,10 +131,29 @@ const socket: Socket = io(BACKEND_URL, {
     // socket.on('movieDeleted', (movieId: string) => setMovies(prev => prev.filter(m => m.id !== movieId)));
 
     // Clean up on unmount
-    return () => {
-      socket.disconnect();
-    };
+    // return () => {
+    //   socket.disconnect();
+    // };
     // --- SOCKET.IO LOGIC END ---
+  }, []);
+
+  useEffect(() => {
+    const fetchOriginals = async () => {
+      try {
+        setLoading(true);
+        const res = await fetch(`${BACKEND_URL}/api/movies/o-v`);
+        // const res = await fetch('https://hobby.nepoba.com/api/movies/list');
+        if (!res.ok) throw new Error('Failed to fetch originals');
+
+        const data: Movie[] = await res.json();
+        setOriginals(data.filter((movie) => movie.type === 'ORIGINAL'));
+      }catch( err: any) {
+        setError(err.message || 'Unknown error');
+      }finally{
+        setLoading(false);
+      }
+    }
+    fetchOriginals();
   }, []);
 
   useEffect(() => {
@@ -134,6 +166,8 @@ const socket: Socket = io(BACKEND_URL, {
         setGenre(data);
       }catch( err: any) {
         setError(err.message || 'Unknown error');
+      }finally{
+        setLoading(false);
       }
     };
     fetchGenre();
@@ -271,7 +305,7 @@ const addReplyLike = async (commentId:string, replyId: string) => {
 };
 
   return (
-    <MovieContext.Provider value={{ movies,genre,comment, addComment,addReply, addCommentLike, isCommentLoading, addReplyLike, fetchComments,socket, loading, error }}>
+    <MovieContext.Provider value={{ movies, originals, genre,comment, addComment,addReply, addCommentLike, isCommentLoading, searchingLoader, addReplyLike, fetchComments, loading, error, searchMovies }}>
       {children}
     </MovieContext.Provider>
   );
