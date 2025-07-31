@@ -632,7 +632,7 @@ const MoviePlayerPage = () => {
                         currentMovie?.title || "this movie"
                       )} on ${window.location.origin}/play/${
                         currentMovie?.id
-                      }/movie`}
+                      }/english-version`}
                       className="bg-green-600 hover:bg-green-700 text-white p-2 rounded-full transition-colors duration-200"
                       target="_blank"
                       rel="noopener noreferrer"
@@ -644,7 +644,7 @@ const MoviePlayerPage = () => {
                     {/* Facebook Share */}
                     <a
                       href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
-                        `${window.location.origin}/play/${currentMovie?.id}/movie`
+                        `${window.location.origin}/play/${currentMovie?.id}/english-version`
                       )}`}
                       className="bg-blue-600 hover:bg-blue-700 text-white p-2 rounded-full transition-colors duration-200"
                       target="_blank"
@@ -659,7 +659,7 @@ const MoviePlayerPage = () => {
                       href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(
                         `Watch ${currentMovie?.title || "this movie"}`
                       )}&url=${encodeURIComponent(
-                        `${window.location.origin}/play/${currentMovie?.id}/movie`
+                        `${window.location.origin}/play/${currentMovie?.id}/english-version`
                       )}`}
                       className="bg-blue-400 hover:bg-blue-500 text-white p-2 rounded-full transition-colors duration-200"
                       target="_blank"
@@ -1100,7 +1100,7 @@ const MoviePlayerPage = () => {
                         <MovieCard
                           key={movie.id}
                           movie={movie}
-                          onClick={() => router.push(`/play/${movie.id}/movie`)}
+                          onClick={() => router.push(`/play/${movie.id}/english-version`)}
                         />
                       ))}
                   </div>
@@ -1119,7 +1119,7 @@ const MoviePlayerPage = () => {
                 {relatedMovies.map((movie, index) => (
                   <React.Fragment key={movie.id}>
                     <div
-                      onClick={() => router.push(`/play/${movie.id}/movie`)}
+                      onClick={() => router.push(`/play/${movie.id}/english-version`)}
                       className="flex cursor-pointer hover:bg-gray-700 p-2 rounded-lg transition-colors"
                     >
                       <div className="w-20 h-28 bg-gray-700 rounded-md flex-shrink-0 overflow-hidden">

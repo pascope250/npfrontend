@@ -125,7 +125,7 @@ const MovieNavbar = () => {
                 {searchResults.map((movie) => (
                   <Link
                     key={movie.id}
-                    href={`/play/${movie.id}/movie`}
+                    href={movie.type ==="TRANSLATED" ? `/play/${movie.id}/movie` : `/play/${movie.id}/english-version`}
                     className="block p-3 hover:bg-gray-700 transition-colors border-b border-gray-700 last:border-b-0"
                     onClick={() => {
                       setSearchQuery("");
