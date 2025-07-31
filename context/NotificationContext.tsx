@@ -25,7 +25,7 @@ const BACKEND_API_URL = process.env.NEXT_PUBLIC_BACKEND_URL || 'https://hobby.ne
 
 export const NotificationProvider = ({ children }: { children: ReactNode }) => {
   const [notifications, setNotifications] = useState<Notification[]>([]);
-  const { socket } = useMovieContext();
+  // const { socket } = useMovieContext();
 
   const loadNotifications = async () => {
     try {
@@ -121,82 +121,82 @@ export const NotificationProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
-  useEffect(() => {
-    loadNotifications();
+  // useEffect(() => {
+  //   loadNotifications();
 
-    if (socket) {
-      socket.on('new-notification', handleNewNotification);
-      socket.on('notification-read', (data: { id: string }) => {
-        setNotifications(prev =>
-          prev.map(n => n.id === data.id.toString() ? { ...n, isRead: true } : n)
-        );
-      });
-    }
+    // if (socket) {
+    //   socket.on('new-notification', handleNewNotification);
+    //   socket.on('notification-read', (data: { id: string }) => {
+    //     setNotifications(prev =>
+    //       prev.map(n => n.id === data.id.toString() ? { ...n, isRead: true } : n)
+    //     );
+    //   });
+    // }
 
     // Handle service worker messages
-    const handleServiceWorkerMessage = (event: MessageEvent) => {
-      if (event.data.type === 'NEW_PUSH_NOTIFICATION') {
-        handleNewNotification(event.data.notification);
-      }
-    };
+    // const handleServiceWorkerMessage = (event: MessageEvent) => {
+    //   if (event.data.type === 'NEW_PUSH_NOTIFICATION') {
+    //     handleNewNotification(event.data.notification);
+    //   }
+    // };
 
-    if (typeof window !== 'undefined' && 'serviceWorker' in navigator) {
-      navigator.serviceWorker.addEventListener('message', handleServiceWorkerMessage);
-    }
+    // if (typeof window !== 'undefined' && 'serviceWorker' in navigator) {
+    //   navigator.serviceWorker.addEventListener('message', handleServiceWorkerMessage);
+    // }
 
-    return () => {
-      if (socket) {
-        socket.off('new-notification', handleNewNotification);
-        socket.off('notification-read');
-      }
-      if (typeof window !== 'undefined' && 'serviceWorker' in navigator) {
-        navigator.serviceWorker.removeEventListener('message', handleServiceWorkerMessage);
-      }
-    };
-  }, [socket]);
+  //   return () => {
+  //     if (socket) {
+  //       socket.off('new-notification', handleNewNotification);
+  //       socket.off('notification-read');
+  //     }
+  //     if (typeof window !== 'undefined' && 'serviceWorker' in navigator) {
+  //       navigator.serviceWorker.removeEventListener('message', handleServiceWorkerMessage);
+  //     }
+  //   };
+  // }, [socket]);
 
 
   // In your NotificationProvider component
-useEffect(() => {
-  const initializeNotifications = async () => {
-    await loadNotifications();
+// useEffect(() => {
+//   const initializeNotifications = async () => {
+//     await loadNotifications();
     
-    // Check for pending notifications from service worker
-    if ('serviceWorker' in navigator) {
-      try {
-        const registration = await navigator.serviceWorker.ready;
-        const pendingNotifications = await new Promise<Notification[]>(resolve => {
-          const channel = new MessageChannel();
-          channel.port1.onmessage = (event) => {
-            if (event.data.type === 'PENDING_NOTIFICATIONS') {
-              resolve(event.data.notifications.map((n: any) => ({
-                id: n.id,
-                title: n.title,
-                message: n.message,
-                url: n.url,
-                timestamp: new Date(n.timestamp),
-                isRead: false
-              })));
-            }
-          };
-          registration.active?.postMessage(
-            { type: 'GET_PENDING_NOTIFICATIONS' },
-            [channel.port2]
-          );
-          setTimeout(() => resolve([]), 1000);
-        });
+//     // Check for pending notifications from service worker
+//     if ('serviceWorker' in navigator) {
+//       try {
+//         const registration = await navigator.serviceWorker.ready;
+//         const pendingNotifications = await new Promise<Notification[]>(resolve => {
+//           const channel = new MessageChannel();
+//           channel.port1.onmessage = (event) => {
+//             if (event.data.type === 'PENDING_NOTIFICATIONS') {
+//               resolve(event.data.notifications.map((n: any) => ({
+//                 id: n.id,
+//                 title: n.title,
+//                 message: n.message,
+//                 url: n.url,
+//                 timestamp: new Date(n.timestamp),
+//                 isRead: false
+//               })));
+//             }
+//           };
+//           registration.active?.postMessage(
+//             { type: 'GET_PENDING_NOTIFICATIONS' },
+//             [channel.port2]
+//           );
+//           setTimeout(() => resolve([]), 1000);
+//         });
 
-        if (pendingNotifications.length > 0) {
-          setNotifications(prev => [...pendingNotifications, ...prev]);
-        }
-      } catch (error) {
-        console.error('Error checking pending notifications:', error);
-      }
-    }
-  };
+//         if (pendingNotifications.length > 0) {
+//           setNotifications(prev => [...pendingNotifications, ...prev]);
+//         }
+//       } catch (error) {
+//         console.error('Error checking pending notifications:', error);
+//       }
+//     }
+//   };
 
-  initializeNotifications();
-}, [socket]);
+//   initializeNotifications();
+// }, [socket]);
 
   const markAsRead = async (id: string) => {
     const originalState = notifications;
