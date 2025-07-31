@@ -118,7 +118,7 @@ export default function RootLayout({
           }}
         />
 
-        {/* <script
+        <script
   id="disable-devtools"
   dangerouslySetInnerHTML={{
     __html: `
@@ -172,7 +172,7 @@ export default function RootLayout({
       });
     `,
   }}
-/> */}
+/>
       </head>
 
       <body className={`antialiased`}>
