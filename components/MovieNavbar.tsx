@@ -32,8 +32,16 @@ const MovieNavbar = () => {
     };
   }, []);
 
-  const handleSearch = async (query: string) => {
-    setSearchQuery(query);
+ let timeoutId: NodeJS.Timeout;
+
+const handleSearch = (query: string) => {
+  setSearchQuery(query);
+  
+  // Clear previous timeout
+  clearTimeout(timeoutId);
+  
+  // Set new timeout
+  timeoutId = setTimeout(async () => {
     if (query.trim() === "") {
       setSearchResults([]);
       return;
@@ -41,7 +49,8 @@ const MovieNavbar = () => {
 
     const results = await searchMovies(query);
     setSearchResults(results || []);
-  };
+  }, 800); // 300ms delay
+};
 
   return (
     <>
